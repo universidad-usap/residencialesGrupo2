@@ -1,0 +1,33 @@
+<mat-toolbar color="primary" *ngIf="showNavbar()" class="navbar-shadow">
+  <span class="brand-title">Residencial Grupo 2</span>
+  
+  <span class="spacer"></span>
+
+  <button mat-button [matMenuTriggerFor]="menuMantenimiento">
+    <i class="fas fa-tools me-1"></i> Mantenimientos
+  </button>
+  <mat-menu #menuMantenimiento="matMenu">
+    <a mat-menu-item routerLink="/casas">
+      <i class="fas fa-home me-2"></i> Casas
+    </a>
+    <a mat-menu-item routerLink="/areas">
+      <i class="fas fa-layer-group me-2"></i> Áreas
+    </a>
+  </mat-menu>
+
+  <button mat-button [matMenuTriggerFor]="menuInfo">
+    <i class="fas fa-info-circle me-1"></i> Información
+  </button>
+  <mat-menu #menuInfo="matMenu">
+    <a mat-menu-item routerLink="/servicios">
+      <i class="fas fa-concierge-bell me-2"></i> Servicios
+    </a>
+    <a mat-menu-item routerLink="/comunicados">
+      <i class="fas fa-bullhorn me-2"></i> Comunicados
+    </a>
+  </mat-menu>
+
+  <button mat-button (click)="logout()" class="btn-logout">
+    <i class="fas fa-sign-out-alt me-1"></i> Cerrar Sesión
+  </button>
+</mat-toolbar>

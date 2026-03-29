@@ -1,0 +1,49 @@
+/* Esto va al principio de tu login.css */
+:host {
+  display: block;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Forzar que el fondo ocupe todo sin bordes */
+.main-wrapper {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--bg-color); /* Asegúrate que esta variable sea #0d1117 en dark */
+  position: fixed; /* O absolute para asegurar cobertura total */
+  top: 0;
+  left: 0;
+}
+
+/* Ajuste para el contenedor de la contraseña para que el ojo flote dentro */
+.input-glass {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: var(--input-bg);
+  border-radius: 8px;
+  padding: 0 10px;
+}
+
+.input-glass input {
+  flex: 1;
+  padding-right: 40px; /* Espacio para el ojo */
+}
+
+.btn-eye {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: var(--accent-neon);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
