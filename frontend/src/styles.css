@@ -1,3 +1,127 @@
+/* src/styles.css */
 @import "bootstrap/dist/css/bootstrap.min.css";
 
-.spacer { flex: 1 1 auto; } /* Para que el menú se vea bien */
+/* --- VARIABLES DE COLOR --- */
+:root {
+  --verde-oscuro: #182b17;
+  --crema-claro: #f4f1ec;
+  --blanco: #ffffff;
+  --negro-navbar: #111111;
+  --gris-card: #222222;       /* Fondo para tarjetas en modo oscuro */
+  --gris-input: #2a2a2a;      /* Fondo para inputs en modo oscuro */
+  --azul-luna: #007bff; 
+}
+
+/* --- CONFIGURACIÓN BASE --- */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.spacer { flex: 1 1 auto; }
+
+/* --- MODO OSCURO GLOBAL --- */
+body.dark-mode {
+  background-color: var(--verde-oscuro) !important;
+  color: var(--crema-claro) !important;
+}
+
+/* Navbar en Modo Oscuro */
+body.dark-mode mat-toolbar {
+  background-color: var(--negro-navbar) !important;
+  color: var(--blanco) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode mat-toolbar button,
+body.dark-mode mat-toolbar .brand-title {
+  color: var(--crema-claro) !important;
+}
+
+/* --- MENÚS DESPLEGABLES (mat-menu) --- */
+.dark-mode .mat-mdc-menu-panel {
+  background-color: var(--gris-card) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .mat-mdc-menu-item {
+  color: var(--crema-claro) !important;
+}
+
+.dark-mode .mat-mdc-menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* --- ELEMENTOS DE PÁGINA (Cards, Tablas, Inputs) --- */
+
+/* Ajuste de Card para formularios en modo oscuro */
+body.dark-mode .card {
+  background-color: var(--gris-card) !important;
+  color: var(--crema-claro) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+}
+
+/* Headers de cards (como el verde de "Registrar Nueva Área") */
+body.dark-mode .card-header, 
+body.dark-mode .bg-success {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Tablas */
+body.dark-mode .table {
+  color: var(--crema-claro) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.dark-mode .table td, 
+body.dark-mode .table th {
+  background-color: transparent !important;
+  color: var(--crema-claro) !important;
+}
+
+/* --- FORMULARIOS E INPUTS (MODO OSCURO) --- */
+
+body.dark-mode .form-label, 
+body.dark-mode label {
+  color: var(--crema-claro) !important;
+}
+
+body.dark-mode .form-control, 
+body.dark-mode input {
+  background-color: var(--gris-input) !important;
+  color: var(--blanco) !important;
+  border: 1px solid #444444 !important; /* Borde más visible */
+}
+
+/* PLACEHOLDERS LEGIBLES (Clave para "Ej: Gimnasio") */
+body.dark-mode .form-control::placeholder,
+body.dark-mode input::placeholder {
+  color: rgba(255, 255, 255, 0.5) !important; /* Blanco suave pero visible */
+}
+
+/* Focus en inputs */
+body.dark-mode .form-control:focus {
+  background-color: #333333 !important;
+  border-color: #28a745 !important; /* Resalte verde al escribir */
+  box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25) !important;
+}
+
+/* --- UTILIDADES DE ICONOS Y BOTONES --- */
+.text-warning { color: #ffca28 !important; } /* Sol */
+.text-moon-blue { color: var(--azul-luna) !important; } /* Luna azul vibrante */
+
+/* Inversión de Logo automática */
+body.dark-mode .main-logo, 
+body.dark-mode img[src*="Valle"] {
+  filter: invert(1) brightness(2) !important;
+}
+
+/* --- CENTRADO PARA LOGIN --- */
+.main-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}

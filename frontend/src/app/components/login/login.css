@@ -1,49 +1,173 @@
-/* Esto va al principio de tu login.css */
-:host {
-  display: block;
-  height: 100vh;
-  width: 100vw;
+/* --- VARIABLES DE PALETA SOLICITADA --- */
+:root {
+  --color-verde-bosque: #182b17; /* Verde oscuro principal */
+  --color-carbon: #222222;        /* Gris muy oscuro */
+  --color-crema: #f4f1ec;         /* Blanco roto/crema */
+  --color-negro: #000000;
+  --color-blanco: #ffffff;
+
+  /* Modo Claro - Basado en Crema y Verde */
+  --bg-main: var(--color-crema);
+  --card-bg: var(--color-blanco);
+  --text-main: var(--color-carbon);
+  --text-muted: #6b7280;
+  --accent: var(--color-verde-bosque);
+  --input-bg: #ffffff;
+  --input-border: rgba(0, 0, 0, 0.1);
 }
 
-/* Forzar que el fondo ocupe todo sin bordes */
+/* --- MODO OSCURO - ASIGNACIÓN DE ALTO CONTRASTE --- */
+.dark-mode {
+  --bg-main: var(--color-negro);
+  --card-bg: var(--color-verde-bosque); /* Elevación verde oscuro */
+  --text-main: var(--color-crema);      /* Letras en crema para lectura clara */
+  --text-muted: #aab7b8;
+  --accent: var(--color-crema);         /* Acento en crema para resaltar */
+  --input-bg: var(--color-carbon);      /* Inputs integrados */
+  --input-border: rgba(255, 255, 255, 0.1);
+}
+
+/* --- ESTRUCTURA BASE --- */
+:host {
+  display: block;
+}
+
 .main-wrapper {
-  margin: 0;
-  padding: 0;
   min-height: 100vh;
-  width: 100%;
+  width: 100vw;
   display: flex;
-  justify-content: center;
   align-items: center;
-  background-color: var(--bg-color); /* Asegúrate que esta variable sea #0d1117 en dark */
-  position: fixed; /* O absolute para asegurar cobertura total */
+  justify-content: center;
+  transition: all 0.5s ease;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  position: fixed;
   top: 0;
   left: 0;
 }
 
-/* Ajuste para el contenedor de la contraseña para que el ojo flote dentro */
-.input-glass {
-  position: relative;
+/* --- OPTIMIZACIÓN DEL LOGO (CENTRALIZADO) --- */
+.logo-container {
   display: flex;
-  align-items: center;
-  width: 100%;
-  background: var(--input-bg);
-  border-radius: 8px;
-  padding: 0 10px;
-}
-
-.input-glass input {
-  flex: 1;
-  padding-right: 40px; /* Espacio para el ojo */
-}
-
-.btn-eye {
-  position: absolute;
-  right: 10px;
-  background: none;
-  border: none;
-  color: var(--accent-neon);
-  cursor: pointer;
-  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.main-logo {
+  max-width: 200px;
+  height: auto;
+  margin-bottom: 10px;
+  transition: filter 0.5s ease;
+}
+
+/* Inversión de color para modo oscuro */
+.dark-mode .main-logo {
+  filter: invert(1) brightness(1.5);
+}
+
+/* --- TARJETA DE LOGIN --- */
+.login-card {
+  width: 90%;
+  max-width: 420px;
+  background-color: var(--card-bg);
+  border-radius: 24px;
+  padding: 2.5rem 2rem;
+  border: 1px solid var(--input-border);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s ease;
+}
+
+.dark-mode .login-card {
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+}
+
+/* --- TEXTOS Y ETIQUETAS --- */
+.form-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-main);
+  margin-bottom: 0.6rem;
+}
+
+/* Ajuste para el texto "¿No tienes una cuenta?" en modo oscuro */
+.dark-mode .text-muted,
+.dark-mode p {
+  color: var(--text-main) !important;
+  opacity: 0.8;
+}
+
+/* --- INPUTS --- */
+.custom-field {
+  background-color: var(--input-bg) !important;
+  border: 1.5px solid var(--input-border) !important;
+  border-radius: 12px !important;
+  transition: all 0.3s ease;
+}
+
+.custom-field input {
+  color: var(--text-main) !important;
+  font-weight: 500;
+}
+
+/* --- BOTÓN INICIAR SESIÓN --- */
+.btn-login {
+  background-color: var(--accent);
+  color: var(--bg-main); 
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+/* --- SECCIÓN REGISTRO (ARREGLO PARA MODO OSCURO) --- */
+.register-section {
+  border-top: 1px solid var(--input-border) !important;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  text-align: center;
+}
+
+/* Texto "Crear Usuario Nuevo" visible en ambos modos */
+.btn-outline-custom {
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  background: transparent;
+  font-weight: 700;
+  border-radius: 50px;
+  padding: 8px 30px;
+  display: inline-flex;
+  flex-direction: column; /* Para que el texto se apile como en tu imagen */
+  align-items: center;
+  text-decoration: none;
+}
+
+.btn-outline-custom:hover {
+  background-color: var(--accent);
+  color: var(--bg-main);
+}
+
+/* --- BOTÓN DE TEMA --- */
+.theme-toggle {
+  position: fixed;
+  top: 25px;
+  right: 25px;
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  background-color: var(--card-bg);
+  color: var(--text-main);
+  border: 1px solid var(--input-border);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }

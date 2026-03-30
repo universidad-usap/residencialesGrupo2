@@ -1,5 +1,13 @@
 CREATE DATABASE residencial_qr;
 USE residencial_qr;
+SELECT * FROM usuarios;
+INSERT INTO areas (nombre_area, descripcion) 
+VALUES ('Piscina', 'Area Comun - Solo para Residentes');
+
+INSERT INTO usuarios (nombre, usuario, password) 
+VALUES ('Jose Sevilla', 'admin', '12345');
+
+ALTER TABLE areas ADD COLUMN estado TINYINT(1) DEFAULT 1;
 
 -- TABLA AREAS
 CREATE TABLE areas (
