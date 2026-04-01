@@ -1,8 +1,18 @@
 CREATE DATABASE residencial_qr;
 USE residencial_qr;
 SELECT * FROM usuarios;
-INSERT INTO areas (nombre_area, descripcion) 
-VALUES ('Piscina', 'Area Comun - Solo para Residentes');
+
+ALTER TABLE usuarios ADD COLUMN rol VARCHAR(20) DEFAULT 'RESIDENTE';
+
+INSERT INTO usuarios 
+VALUES ('Jesus Maradiaga', 'J.Maradiaga', '1234', 'ADMIN');
+
+UPDATE usuarios 
+SET nombre = 'Angie Cruz',
+	usuario = 'A.Cruz', 
+    password = '12345',
+    rol = 'ADMIN'
+WHERE id_usuario = 3;
 
 INSERT INTO usuarios (nombre, usuario, password) 
 VALUES ('Jose Sevilla', 'admin', '12345');
