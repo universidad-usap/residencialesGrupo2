@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api';
 import Swal from 'sweetalert2';
+import { ChangeDetectorRef } from '@angular/core';
+import { ExportService } from '../../services/export.service';
 
 @Component({
   selector: 'app-servicios',
@@ -29,7 +31,7 @@ export class ServiciosComponent implements OnInit {
     monto: 0
   };
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private cd: ChangeDetectorRef, private exportService: ExportService) {}
 
   ngOnInit(): void {
     this.cargarDatos();
@@ -51,7 +53,10 @@ export class ServiciosComponent implements OnInit {
 
   cargarServicios() {
     this.apiService.getCatalog().subscribe(
-      (res: any) => this.servicios = res,
+      (res: any) => {
+        this.servicios = [...res]; // 👈 esto fuerza a Angular a refrescar la vista
+        this.cd.detectChanges();
+      },
       (err: any) => console.error(err)
     );
   }
@@ -66,8 +71,10 @@ export class ServiciosComponent implements OnInit {
       (res: any) => {
         Swal.fire('Éxito', 'Servicio agregado al catálogo', 'success');
         this.nuevoServicio = { nombre: '', descripcion: '', costo: 0 };
-        this.cargarServicios();
-      },
+        this.servicios = [...this.servicios, res];
+
+      this.cd.detectChanges();
+    },
       (err: any) => Swal.fire('Error', 'No se pudo guardar el servicio', 'error')
     );
   }
@@ -131,21 +138,54 @@ export class ServiciosComponent implements OnInit {
       err => Swal.fire('Error', 'No se pudo cambiar el estado', 'error')
     );
   }
+  exportarServiciosExcel() {
+  const data = this.servicios.map((servicio: any) => ({
+    'Nombre': servicio.nombre,
+    'Descripción': servicio.descripcion,
+    'Costo': servicio.costo,
+    'Estado': servicio.estado
+  }));
+
+  this.exportService.exportToExcel(data, 'reporte_servicios', 'Servicios');
+}
+exportarServiciosPdf() {
+  const headers = ['Nombre', 'Descripción', 'Costo', 'Estado'];
+
+  const rows = this.servicios.map((servicio: any) => [
+    servicio.nombre || '',
+    servicio.descripcion || '',
+    servicio.costo || 0,
+    servicio.estado || ''
+  ]);
+
+  this.exportService.exportToPdf(
+    'Reporte de Servicios',
+    headers,
+    rows,
+    'reporte_servicios'
+  );
+}
 
   // ==========================================
   //         LÓGICA DE PAGOS
   // ==========================================
 
   cargarPagos() {
-    this.apiService.getPagos().subscribe(
-      (res: any) => this.pagos = res,
-      (err: any) => console.error(err)
-    );
-  }
+  this.apiService.getPagos().subscribe(
+    (res: any) => {
+      this.pagos = [...res];
+      this.cd.detectChanges();
+    },
+    (err: any) => console.error(err)
+  );
+}
 
   cargarCasas() {
     this.apiService.getCasas().subscribe(
-      (res: any) => this.casas = res,
+      (res: any) => {
+        this.casas = [...res];
+        this.cd.detectChanges();
+      },
       (err: any) => console.error(err)
     );
   }
@@ -185,4 +225,37 @@ export class ServiciosComponent implements OnInit {
       default: return 'bg-secondary';
     }
   }
+  exportarPagosExcel() {
+  const data = this.pagos.map((pago: any) => ({
+    'Casa': pago.numero_casa,
+    'Servicio': pago.nombre_servicio,
+    'Monto': pago.monto,
+    'Estado': pago.estado,
+    'Fecha de Pago': pago.fecha_pago
+      ? new Date(pago.fecha_pago).toLocaleDateString('es-HN')
+      : ''
+  }));
+
+  this.exportService.exportToExcel(data, 'reporte_pagos', 'Pagos');
+}
+exportarPagosPdf() {
+  const headers = ['Casa', 'Servicio', 'Monto', 'Estado', 'Fecha de Pago'];
+
+  const rows = this.pagos.map((pago: any) => [
+    pago.numero_casa || '',
+    pago.nombre_servicio || '',
+    pago.monto || 0,
+    pago.estado || '',
+    pago.fecha_pago
+      ? new Date(pago.fecha_pago).toLocaleDateString('es-HN')
+      : ''
+  ]);
+
+  this.exportService.exportToPdf(
+    'Reporte de Pagos',
+    headers,
+    rows,
+    'reporte_pagos'
+  );
+}
 }

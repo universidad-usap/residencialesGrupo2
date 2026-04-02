@@ -111,4 +111,7 @@ export class ApiService {
   updateEstadoPago(id: any, estado: any): Observable<any> {
     return this.http.put(`${this.API_URI}/servicios/pagos/${id}`, { estado });
   }
+  getPagosPorCasa(id: number) {
+  return this.http.get(`${this.API_URI}/pagos/casa/${id}`);
+  }
 }

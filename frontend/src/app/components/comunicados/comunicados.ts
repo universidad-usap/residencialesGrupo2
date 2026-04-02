@@ -3,6 +3,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api';
 import Swal from 'sweetalert2';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-comunicados',
@@ -23,6 +24,7 @@ export class ComunicadosComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
+    private cd: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -38,7 +40,9 @@ export class ComunicadosComponent implements OnInit {
         // Validación crítica: Solo asignamos si la respuesta es un arreglo
         // Esto previene el error NG02200 si el servidor envía un objeto por error
         if (Array.isArray(res)) {
-          this.comunicados = res;
+          this.comunicados = [...res];
+          this.cd.detectChanges();
+
         } else {
           console.error('La respuesta del servidor no es un arreglo:', res);
           this.comunicados = [];

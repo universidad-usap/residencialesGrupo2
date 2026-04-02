@@ -67,43 +67,57 @@
       </div>
 
       <div class="card border-0 shadow-sm">
-        <div class="card-header bg-header-dark py-2 d-flex justify-content-between align-items-center">
-          <h6 class="text-white mb-0 fw-bold small"><i class="fas fa-history me-2 text-primary"></i>GESTIÓN DE PAGOS</h6>
-          <span class="badge bg-primary px-3">{{pagos.length}} Registros</span>
-        </div>
-        <div class="card-body p-0">
-          <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-              <thead>
-                <tr>
-                  <th class="ps-4">ID</th>
-                  <th>Casa</th>
-                  <th>Servicio</th>
-                  <th>Monto</th>
-                  <th>Estado</th>
-                  <th class="text-center">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let p of pagos">
-                  <td class="ps-4 text-muted">{{p.id_pago}}</td>
-                  <td class="fw-bold">Casa #{{p.numero_casa}}</td>
-                  <td>{{p.nombre_servicio}}</td>
-                  <td class="fw-bold text-dark">L. {{p.monto}}</td>
-                  <td>
-                    <span class="badge" [ngClass]="getBadgeClass(p.estado)">{{p.estado}}</span>
-                  </td>
-                  <td class="text-center">
-                    <button *ngIf="p.estado === 'pendiente'" class="btn btn-sm btn-success" (click)="updateEstadoPago(p.id_pago, 'pagado')">
-                      <i class="fas fa-check"></i>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+  <div class="card-header bg-header-dark py-2 d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <h6 class="text-white mb-0 fw-bold small">
+      <i class="fas fa-history me-2 text-primary"></i>GESTIÓN DE PAGOS
+    </h6>
+
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+      <button class="btn btn-success btn-sm fw-bold" (click)="exportarPagosExcel()" title="Exportar pagos a Excel">
+        <i class="fas fa-file-excel me-1"></i> Excel
+      </button>
+
+      <button class="btn btn-danger btn-sm fw-bold" (click)="exportarPagosPdf()" title="Exportar pagos a PDF">
+        <i class="fas fa-file-pdf me-1"></i> PDF
+      </button>
+
+      <span class="badge bg-primary px-3">{{pagos.length}} Registros</span>
+    </div>
+  </div>
+
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
+          <tr>
+            <th class="ps-4">ID</th>
+            <th>Casa</th>
+            <th>Servicio</th>
+            <th>Monto</th>
+            <th>Estado</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of pagos">
+            <td class="ps-4 text-muted">{{p.id_pago}}</td>
+            <td class="fw-bold">Casa #{{p.numero_casa}}</td>
+            <td>{{p.nombre_servicio}}</td>
+            <td class="fw-bold text-dark">L. {{p.monto}}</td>
+            <td>
+              <span class="badge" [ngClass]="getBadgeClass(p.estado)">{{p.estado}}</span>
+            </td>
+            <td class="text-center">
+              <button *ngIf="p.estado === 'pendiente'" class="btn btn-sm btn-success" (click)="updateEstadoPago(p.id_pago, 'pagado')">
+                <i class="fas fa-check"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
     </div>
 
     <div *ngIf="tabActual === 'catalogo'">
@@ -135,56 +149,70 @@
       </div>
 
       <div class="card border-0 shadow-sm mb-5">
-        <div class="card-header bg-header-dark py-2 d-flex justify-content-between align-items-center">
-          <h6 class="text-white mb-0 fw-bold small"><i class="fas fa-list me-2 text-primary"></i>GESTIÓN DEL CATÁLOGO</h6>
-          <span class="badge bg-primary px-3">{{servicios.length}} Servicios</span>
-        </div>
-        <div class="card-body p-0">
-          <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-              <thead>
-                <tr>
-                  <th class="ps-4">ID</th>
-                  <th>Nombre</th>
-                  <th>Descripción</th>
-                  <th>Costo Base</th>
-                  <th>Estado</th>
-                  <th>Modificar</th>
-                  <th class="text-center">Control</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let s of servicios">
-                  <td class="ps-4 text-muted fw-bold">{{s.id_servicio}}</td>
-                  <td class="fw-bold">{{s.nombre}}</td>
-                  <td class="small">{{s.descripcion}}</td>
-                  <td class="text-success fw-bold">L. {{s.costo}}</td>
-                  
-                  <td>
-                    <span class="badge" [ngClass]="s.estado === 'Activo' ? 'bg-success' : 'bg-secondary'">
-                      {{s.estado || 'Activo'}}
-                    </span>
-                  </td>
+  <div class="card-header bg-header-dark py-2 d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <h6 class="text-white mb-0 fw-bold small">
+      <i class="fas fa-list me-2 text-primary"></i>GESTIÓN DEL CATÁLOGO
+    </h6>
 
-                  <td>
-                    <button class="btn btn-outline-info btn-sm fw-bold" (click)="editarServicio(s)">
-                      <i class="fas fa-edit me-1"></i> Editar
-                    </button>
-                  </td>
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+      <button class="btn btn-success btn-sm fw-bold" (click)="exportarServiciosExcel()" title="Exportar servicios a Excel">
+        <i class="fas fa-file-excel me-1"></i> Excel
+      </button>
 
-                  <td class="text-center">
-                    <button [class]="s.estado === 'Inactivo' ? 'btn btn-success btn-sm w-100' : 'btn btn-danger btn-sm w-100'" 
-                            (click)="toggleEstadoServicio(s)">
-                      <i [class]="s.estado === 'Inactivo' ? 'fas fa-check-circle me-1' : 'fas fa-times-circle me-1'"></i>
-                      {{ s.estado === 'Inactivo' ? 'Activar' : 'Desactivar' }}
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+      <button class="btn btn-danger btn-sm fw-bold" (click)="exportarServiciosPdf()" title="Exportar servicios a PDF">
+        <i class="fas fa-file-pdf me-1"></i> PDF
+      </button>
+
+      <span class="badge bg-primary px-3">{{servicios.length}} Servicios</span>
+    </div>
+  </div>
+
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
+          <tr>
+            <th class="ps-4">ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Costo Base</th>
+            <th>Estado</th>
+            <th>Modificar</th>
+            <th class="text-center">Control</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of servicios">
+            <td class="ps-4 text-muted fw-bold">{{s.id_servicio}}</td>
+            <td class="fw-bold">{{s.nombre}}</td>
+            <td class="small">{{s.descripcion}}</td>
+            <td class="text-success fw-bold">L. {{s.costo}}</td>
+
+            <td>
+              <span class="badge" [ngClass]="s.estado === 'Activo' ? 'bg-success' : 'bg-secondary'">
+                {{s.estado || 'Activo'}}
+              </span>
+            </td>
+
+            <td>
+              <button class="btn btn-outline-info btn-sm fw-bold" (click)="editarServicio(s)">
+                <i class="fas fa-edit me-1"></i> Editar
+              </button>
+            </td>
+
+            <td class="text-center">
+              <button [class]="s.estado === 'Inactivo' ? 'btn btn-success btn-sm w-100' : 'btn btn-danger btn-sm w-100'"
+                      (click)="toggleEstadoServicio(s)">
+                <i [class]="s.estado === 'Inactivo' ? 'fas fa-check-circle me-1' : 'fas fa-times-circle me-1'"></i>
+                {{ s.estado === 'Inactivo' ? 'Activar' : 'Desactivar' }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
     </div>
 
   </div>

@@ -34,3 +34,31 @@ router.put('/pagos/:id', serviciosController.updatePagoStatus);
 
 
 module.exports = router;
+router.get('/casa/:id', (req, res) => {
+
+  const { id } = req.params;
+
+  const query = `
+    SELECT 
+      p.id_pago,
+      s.nombre AS servicio,
+      p.monto,
+      p.fecha_pago,
+      p.estado
+    FROM pagos p
+    JOIN servicios s ON p.id_servicio = s.id_servicio
+    WHERE p.id_casa = ?
+  `;
+
+  connection.query(query, [id], (error, results) => {
+
+    if (error) {
+      console.log(error);
+      return res.status(500).json(error);
+    }
+
+    res.json(results);
+
+  });
+
+});

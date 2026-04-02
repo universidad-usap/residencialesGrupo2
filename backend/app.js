@@ -1,7 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const cors = require('cors');
 const myConnection = require('express-myconnection');
 
@@ -22,7 +22,7 @@ app.use(express.json()); // CRÍTICO: Para que el backend entienda los datos que
 app.use(myConnection(mysql, {
     host: 'localhost',
     user: 'root',
-    password: 'admin200226', // Pon tu contraseña de MySQL
+    password: 'admin200226' , // Pon tu contraseña de MySQL
     port: 3306,
     database: 'residencial_qr'    // Tu nueva base de datos
 }, 'single'));
