@@ -1,1 +1,191 @@
-<p>servicios works!</p>
+<div class="main-wrapper p-4">
+  <div class="container">
+    <div class="d-flex align-items-center mb-4">
+      <div class="icon-box bg-primary text-white rounded-circle p-3 me-3 shadow-sm">
+        <i class="fas fa-hand-holding-usd fa-lg"></i>
+      </div>
+      <h2 class="section-title mb-0 fw-bold text-dark">Gestión de Servicios y Pagos</h2>
+    </div>
+
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card shadow-sm border-0">
+          <div class="card-body p-2 d-flex gap-2">
+            <button class="btn w-50 py-3 fw-bold shadow-none" 
+                    [class.btn-primary]="tabActual === 'pagos'" 
+                    [class.btn-dark]="tabActual !== 'pagos'" 
+                    (click)="cambiarTab('pagos')">
+              <i class="fas fa-file-invoice-dollar me-2"></i>Control de Pagos
+            </button>
+            <button class="btn w-50 py-3 fw-bold shadow-none" 
+                    [class.btn-primary]="tabActual === 'catalogo'" 
+                    [class.btn-dark]="tabActual !== 'catalogo'" 
+                    (click)="cambiarTab('catalogo')">
+              <i class="fas fa-list-ul me-2"></i>Catálogo de Servicios
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="tabActual === 'pagos'">
+      <div class="card border-0 shadow-sm mb-4 overflow-hidden">
+        <div class="card-header bg-success py-2">
+          <h6 class="text-white mb-0 fw-bold small"><i class="fas fa-plus-circle me-2"></i>Asignar Nuevo Cobro</h6>
+        </div>
+        <div class="card-body p-4">
+          <div class="row g-3 align-items-end">
+            <div class="col-md-3">
+              <label class="form-label text-muted small fw-bold mb-2">CASA DEL RESIDENTE</label>
+              <select class="form-select custom-input-white" [(ngModel)]="nuevoPago.id_casa">
+                <option value="">Seleccione casa...</option>
+                <option *ngFor="let casa of casas" [value]="casa.id_casa">
+                  Casa #{{casa.numero_casa}} - {{casa.propietario}}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label text-muted small fw-bold mb-2">SERVICIO A COBRAR</label>
+              <select class="form-select custom-input-white" [(ngModel)]="nuevoPago.id_servicio">
+                <option value="">Seleccione servicio...</option>
+                <option *ngFor="let s of servicios" [value]="s.id_servicio">
+                  {{s.nombre}} (L. {{s.costo}})
+                </option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label text-muted small fw-bold mb-2">MONTO (L.)</label>
+              <input type="number" [(ngModel)]="nuevoPago.monto" class="form-control custom-input-white" placeholder="0.00">
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-primary w-100 py-2 fw-bold" (click)="registrarPago()">
+                <i class="fas fa-save me-2"></i>Guardar Cobro
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-header-dark py-2 d-flex justify-content-between align-items-center">
+          <h6 class="text-white mb-0 fw-bold small"><i class="fas fa-history me-2 text-primary"></i>GESTIÓN DE PAGOS</h6>
+          <span class="badge bg-primary px-3">{{pagos.length}} Registros</span>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead>
+                <tr>
+                  <th class="ps-4">ID</th>
+                  <th>Casa</th>
+                  <th>Servicio</th>
+                  <th>Monto</th>
+                  <th>Estado</th>
+                  <th class="text-center">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let p of pagos">
+                  <td class="ps-4 text-muted">{{p.id_pago}}</td>
+                  <td class="fw-bold">Casa #{{p.numero_casa}}</td>
+                  <td>{{p.nombre_servicio}}</td>
+                  <td class="fw-bold text-dark">L. {{p.monto}}</td>
+                  <td>
+                    <span class="badge" [ngClass]="getBadgeClass(p.estado)">{{p.estado}}</span>
+                  </td>
+                  <td class="text-center">
+                    <button *ngIf="p.estado === 'pendiente'" class="btn btn-sm btn-success" (click)="updateEstadoPago(p.id_pago, 'pagado')">
+                      <i class="fas fa-check"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="tabActual === 'catalogo'">
+      <div class="card border-0 shadow-sm mb-4 overflow-hidden">
+        <div class="card-header bg-success py-2">
+          <h6 class="text-white mb-0 fw-bold small"><i class="fas fa-plus-circle me-2"></i>Registrar Nuevo Tipo de Servicio</h6>
+        </div>
+        <div class="card-body p-4">
+          <div class="row g-3 align-items-end">
+            <div class="col-md-3">
+              <label class="form-label text-muted small fw-bold mb-2">NOMBRE DEL SERVICIO</label>
+              <input type="text" [(ngModel)]="nuevoServicio.nombre" class="form-control custom-input-white" placeholder="Ej: Seguridad">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label text-muted small fw-bold mb-2">DESCRIPCIÓN / OBSERVACIONES</label>
+              <input type="text" [(ngModel)]="nuevoServicio.descripcion" class="form-control custom-input-white" placeholder="Ej: Cobro mensual">
+            </div>
+            <div class="col-md-2">
+              <label class="form-label text-muted small fw-bold mb-2">COSTO BASE (L.)</label>
+              <input type="number" [(ngModel)]="nuevoServicio.costo" class="form-control custom-input-white">
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-primary w-100 py-2 fw-bold" (click)="guardarServicio()">
+                <i class="fas fa-save me-2"></i>Guardar Servicio
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm mb-5">
+        <div class="card-header bg-header-dark py-2 d-flex justify-content-between align-items-center">
+          <h6 class="text-white mb-0 fw-bold small"><i class="fas fa-list me-2 text-primary"></i>GESTIÓN DEL CATÁLOGO</h6>
+          <span class="badge bg-primary px-3">{{servicios.length}} Servicios</span>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead>
+                <tr>
+                  <th class="ps-4">ID</th>
+                  <th>Nombre</th>
+                  <th>Descripción</th>
+                  <th>Costo Base</th>
+                  <th>Estado</th>
+                  <th>Modificar</th>
+                  <th class="text-center">Control</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let s of servicios">
+                  <td class="ps-4 text-muted fw-bold">{{s.id_servicio}}</td>
+                  <td class="fw-bold">{{s.nombre}}</td>
+                  <td class="small">{{s.descripcion}}</td>
+                  <td class="text-success fw-bold">L. {{s.costo}}</td>
+                  
+                  <td>
+                    <span class="badge" [ngClass]="s.estado === 'Activo' ? 'bg-success' : 'bg-secondary'">
+                      {{s.estado || 'Activo'}}
+                    </span>
+                  </td>
+
+                  <td>
+                    <button class="btn btn-outline-info btn-sm fw-bold" (click)="editarServicio(s)">
+                      <i class="fas fa-edit me-1"></i> Editar
+                    </button>
+                  </td>
+
+                  <td class="text-center">
+                    <button [class]="s.estado === 'Inactivo' ? 'btn btn-success btn-sm w-100' : 'btn btn-danger btn-sm w-100'" 
+                            (click)="toggleEstadoServicio(s)">
+                      <i [class]="s.estado === 'Inactivo' ? 'fas fa-check-circle me-1' : 'fas fa-times-circle me-1'"></i>
+                      {{ s.estado === 'Inactivo' ? 'Activar' : 'Desactivar' }}
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

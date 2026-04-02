@@ -1,114 +1,82 @@
-<div [class.dark-mode]="isDarkMode" class="main-wrapper vh-100 vw-100 d-flex align-items-center justify-content-center m-0 p-0">
+<div [class.dark-mode]="isDarkMode" class="main-wrapper d-flex align-items-center justify-content-center">
   
   <button class="theme-toggle shadow-sm" (click)="toggleTheme()" type="button">
     <i class="fas" [ngClass]="isDarkMode ? 'fa-sun text-warning' : 'fa-moon text-primary'"></i>
   </button>
 
-  <div class="container animate__animated animate__fadeIn">
-    <div class="row justify-content-center w-100 m-0">
-      <div class="col-12 col-sm-10 col-md-8 col-lg-5 col-xl-4">
+  <div class="col-11 col-sm-8 col-md-6 col-lg-4 animate__animated animate__fadeIn">
+    <div class="card shadow-lg auth-card">
+      <div class="card-body p-4 p-md-5">
         
-        <div class="card shadow-lg border-0 auth-card" [ngClass]="isDarkMode ? 'bg-dark-card border-gold' : 'bg-white'">
-          <div class="card-body p-4 p-md-5">
-            
-            <div class="text-center mb-4">
-              <div class="logo-wrapper mb-3" [class.bg-white-circle]="isDarkMode">
-                <img src="img/logo.png" alt="Logo" class="img-fluid" width="100">
-              </div>
-            </div>
-
-            <div class="auth-toggle-container mb-4" [class.dark-border]="isDarkMode">
-              <button class="auth-toggle-btn" 
-                      [class.active]="!isRegistering" 
-                      [class.active-dark]="isRegistering && isDarkMode"
-                      (click)="isRegistering = false">
-                Iniciar sesión
-              </button>
-              <button class="auth-toggle-btn" 
-                      [class.active]="isRegistering" 
-                      (click)="isRegistering = true">
-                Crear una cuenta
-              </button>
-            </div>
-
-            <h2 class="h4 fw-bold mb-4 text-center" [ngClass]="isDarkMode ? 'text-white' : 'text-dark'">
-              {{ isRegistering ? 'Crear una cuenta para usuarios nuevos' : 'Iniciar sesión para usuarios existentes' }}
-            </h2>
-
-            <form *ngIf="!isRegistering" (ngSubmit)="ejecutarLogin()" #loginForm="ngForm">
-              <div class="mb-3">
-                <label class="form-label fw-bold" [ngClass]="isDarkMode ? 'text-gold-light' : 'text-muted'">Nombre de usuario</label>
-                <div class="input-group custom-field-group">
-                  <span class="input-group-text bg-transparent" [class.border-gold]="isDarkMode">
-                    <i class="fas fa-user" [class.text-gold]="isDarkMode"></i>
-                  </span>
-                  <input type="text" [(ngModel)]="loginData.usuario" name="usuario" 
-                         class="form-control custom-input" 
-                         [ngClass]="isDarkMode ? 'dark-input' : ''" required>
-                </div>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label fw-bold" [ngClass]="isDarkMode ? 'text-gold-light' : 'text-muted'">Contraseña</label>
-                <div class="input-group custom-field-group">
-                  <span class="input-group-text bg-transparent" [class.border-gold]="isDarkMode">
-                    <i class="fas fa-lock" [class.text-gold]="isDarkMode"></i>
-                  </span>
-                  <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="loginData.password" name="password" 
-                         class="form-control custom-input" 
-                         [ngClass]="isDarkMode ? 'dark-input' : ''" required>
-                  <button class="btn btn-outline-secondary border-start-0" 
-                          [class.border-gold]="isDarkMode"
-                          type="button" (click)="togglePassword()">
-                    <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'" [class.text-gold]="isDarkMode"></i>
-                  </button>
-                </div>
-              </div>
-
-              <button type="submit" class="btn btn-primary-auth w-100 py-3 fw-bold mt-3 shadow" 
-                      [disabled]="!loginForm.valid">
-                Entrar al Sistema
-              </button>
-            </form>
-
-            <form *ngIf="isRegistering" (ngSubmit)="ejecutarRegistro()" #registerForm="ngForm">
-              <div class="mb-3">
-                <label class="form-label fw-bold" [ngClass]="isDarkMode ? 'text-gold-light' : 'text-muted'">Nombre completo</label>
-                <input type="text" [(ngModel)]="registerData.nombre" name="regNombre" 
-                       class="form-control custom-input" 
-                       [ngClass]="isDarkMode ? 'dark-input' : ''" required>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label fw-bold" [ngClass]="isDarkMode ? 'text-gold-light' : 'text-muted'">Nombre de usuario</label>
-                <input type="text" [(ngModel)]="registerData.usuario" name="regUsuario" 
-                       class="form-control custom-input" 
-                       [ngClass]="isDarkMode ? 'dark-input' : ''" required>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label fw-bold" [ngClass]="isDarkMode ? 'text-gold-light' : 'text-muted'">Contraseña</label>
-                <input type="password" [(ngModel)]="registerData.password" name="regPassword" 
-                       class="form-control custom-input" 
-                       [ngClass]="isDarkMode ? 'dark-input' : ''" required>
-              </div>
-
-              <div class="mb-4">
-                <label class="form-label fw-bold" [ngClass]="isDarkMode ? 'text-gold-light' : 'text-muted'">Código Admin (Opcional)</label>
-                <input type="password" [(ngModel)]="registerData.adminCode" name="regAdminCode" 
-                       class="form-control custom-input" 
-                       [ngClass]="isDarkMode ? 'dark-input' : ''">
-              </div>
-
-              <button type="submit" class="btn btn-primary-auth w-100 py-3 fw-bold shadow" 
-                      [disabled]="!registerForm.valid">
-                Confirmar Registro
-              </button>
-            </form>
-
+        <div class="text-center mb-4">
+          <div [class.bg-white-circle]="isDarkMode" class="logo-container">
+            <img src="img/logo.png" width="110" alt="Logo Residenciales">
           </div>
         </div>
+
+        <div class="auth-toggle-container mb-4">
+          <button type="button" class="auth-toggle-btn" 
+                  [class.active]="!isRegistering" 
+                  (click)="isRegistering = false">
+            Entrar
+          </button>
+          <button type="button" class="auth-toggle-btn" 
+                  [class.active]="isRegistering" 
+                  (click)="isRegistering = true">
+            Registrarse
+          </button>
         </div>
+
+        <h3 class="text-center h5 mb-4 fw-bold">
+          {{ isRegistering ? 'Crear Cuenta Nueva' : 'Acceso Administrativo' }}
+        </h3>
+
+        <form (ngSubmit)="isRegistering ? ejecutarRegistro() : ejecutarLogin()" #authForm="ngForm">
+          
+          <div class="mb-3" *ngIf="isRegistering">
+            <label class="form-label fw-bold">Nombre Completo</label>
+            <input type="text" [(ngModel)]="registerData.nombre" name="regNombre" 
+                   class="form-control custom-input" required placeholder="Ej: Juan Pérez">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Usuario</label>
+            <input *ngIf="!isRegistering" type="text" [(ngModel)]="loginData.usuario" 
+                   name="loginU" class="form-control custom-input" required placeholder="Tu usuario">
+            <input *ngIf="isRegistering" type="text" [(ngModel)]="registerData.usuario" 
+                   name="regU" class="form-control custom-input" required placeholder="Crea un usuario">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Contraseña</label>
+            <div class="input-group">
+              <input *ngIf="!isRegistering" [type]="showPassword ? 'text' : 'password'" 
+                     [(ngModel)]="loginData.password" name="loginP" 
+                     class="form-control custom-input" required placeholder="••••••••">
+              
+              <input *ngIf="isRegistering" [type]="showPassword ? 'text' : 'password'" 
+                     [(ngModel)]="registerData.password" name="regP" 
+                     class="form-control custom-input" required placeholder="Mínimo 6 caracteres">
+              
+              <button class="btn btn-outline-secondary border-start-0" type="button" (click)="togglePassword()">
+                <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="mb-4" *ngIf="isRegistering">
+            <label class="form-label fw-bold">Código de Autorización (Opcional)</label>
+            <input type="password" [(ngModel)]="registerData.adminCode" name="regAdmin" 
+                   class="form-control custom-input" placeholder="Solo para personal">
+          </div>
+
+          <button type="submit" class="btn btn-primary-auth w-100 py-3 fw-bold mt-2 shadow-sm"
+                  [disabled]="!authForm.valid">
+            {{ isRegistering ? 'REGISTRARME' : 'INICIAR SESIÓN' }}
+          </button>
+        </form>
+
+      </div>
     </div>
   </div>
 </div>

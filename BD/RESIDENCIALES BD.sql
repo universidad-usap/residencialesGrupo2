@@ -1,11 +1,23 @@
 CREATE DATABASE residencial_qr;
 USE residencial_qr;
-SELECT * FROM usuarios;
+SELECT * FROM pagos;
 
 ALTER TABLE usuarios ADD COLUMN rol VARCHAR(20) DEFAULT 'RESIDENTE';
 
+ALTER TABLE servicios ADD COLUMN estado VARCHAR(20) DEFAULT 'Activo';
+
+ALTER TABLE pagos ADD COLUMN estado VARCHAR(20) DEFAULT 'pendiente';
+
 INSERT INTO usuarios 
 VALUES ('Jesus Maradiaga', 'J.Maradiaga', '1234', 'ADMIN');
+
+CREATE TABLE comunicados (
+    id_comunicado INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    mensaje TEXT NOT NULL,
+    prioridad ENUM('informativo', 'evento', 'urgente') DEFAULT 'informativo',
+    fecha_publicacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 UPDATE usuarios 
 SET nombre = 'Angie Cruz',

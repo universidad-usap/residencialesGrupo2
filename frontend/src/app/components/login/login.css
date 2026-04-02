@@ -1,145 +1,144 @@
 :root {
-  --primary-blue: #0071bc;
-  --bg-light: #f0f6fa;
-  --text-dark: #1b1b1b;
-  --gold-accent: #c5a059; /* El dorado de tu logo */
-  --gold-hover: #e2b66a;
+  --primary: #182b17;
+  --gold: #c5a059;
+  --bg-light: #f4f1ec; /* Crema suave para mejor legibilidad */
+  --card-light: #ffffff;
+  --dark-bg: #0a0a0a;  /* Negro profundo para eliminar el verde */
+  --dark-card: #161b22;
+}
+
+/* --- RESET GLOBAL PARA EVITAR BORDES VERDES --- */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  /* Evita que se vea el fondo original de la app */
+  background-color: var(--bg-light); 
+  transition: background-color 0.4s ease;
+}
+
+/* Cuando se activa el modo oscuro, forzamos TODO el fondo */
+body.dark-mode {
+  background-color: var(--dark-bg) !important;
 }
 
 .main-wrapper {
-  background-color: var(--bg-light);
-  transition: all 0.4s ease;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* El color lo hereda del body para evitar cortes visuales */
 }
 
-/* --- TARJETA PRINCIPAL --- */
+/* --- SELECTOR DE TEMA --- */
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  border: none;
+  background: var(--card-light);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dark-mode .theme-toggle {
+  background: var(--dark-card);
+  color: white;
+}
+
+/* --- TARJETA --- */
 .auth-card {
-  border-radius: 16px !important; /* Más redondeado para verse moderno */
-  background-color: #ffffff !important;
-  transition: transform 0.3s ease;
+  border-radius: 20px !important;
+  background: var(--card-light) !important;
+  border: 1px solid rgba(0,0,0,0.05) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
-/* --- SELECTOR DE PESTAÑAS --- */
+/* --- TABS --- */
 .auth-toggle-container {
   display: flex;
-  border: 1px solid #dfe1e2;
+  background: rgba(0,0,0,0.05);
+  padding: 5px;
   border-radius: 50px;
-  overflow: hidden;
-  padding: 4px;
-  background-color: rgba(0,0,0,0.03);
 }
 
 .auth-toggle-btn {
-  flex: 1;
-  border: none;
+  flex: 1; 
+  border: none; 
   background: transparent;
-  padding: 12px;
-  font-weight: 700;
-  font-size: 0.9rem;
-  color: var(--text-dark);
+  padding: 10px; 
+  font-weight: 700; 
   border-radius: 50px;
+  color: var(--primary); 
   transition: 0.3s;
 }
 
-.auth-toggle-btn.active {
-  background-color: var(--primary-blue);
-  color: white;
-  box-shadow: 0 4px 10px rgba(0, 113, 188, 0.3);
-}
-
-/* --- INPUTS --- */
-.custom-input {
-  border: 1px solid #71767a !important;
-  border-radius: 8px !important;
-  padding: 12px !important;
-  background-color: #ffffff !important;
-  color: var(--text-dark) !important;
-}
-
-.custom-input:focus {
-  outline: none !important;
-  border-color: var(--primary-blue) !important;
-  box-shadow: 0 0 0 3px rgba(36, 145, 255, 0.2) !important;
-}
-
-/* --- BOTÓN PRINCIPAL --- */
-.btn-primary-auth {
-  background-color: var(--primary-blue) !important;
-  color: white !important;
-  border: none !important;
-  border-radius: 8px !important;
-  transition: all 0.3s ease !important;
-}
-
-.btn-primary-auth:hover {
-  filter: brightness(1.1);
-  transform: translateY(-1px);
-}
-
-/* --- 🌙 MODO OSCURO MEJORADO (PREMIUM) --- */
-.dark-mode {
-  --bg-light: #0a100a; /* Negro muy profundo para el fondo */
-}
-
-/* Tarjeta en Modo Oscuro */
-.dark-mode .auth-card {
-  background-color: #161b22 !important; /* Gris grafito oscuro */
-  color: #f0f6fb !important;
-  border: 1px solid var(--gold-accent) !important; /* Borde dorado sutil */
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6) !important;
-}
-
-/* Inputs en Modo Oscuro */
-.dark-mode .custom-input {
-  background-color: #0d1117 !important;
+/* Tab activo en modo claro */
+body:not(.dark-mode) .auth-toggle-btn.active {
+  background: var(--primary); 
   color: #ffffff !important;
-  border-color: #30363d !important;
 }
 
-.dark-mode .custom-input:focus {
-  border-color: var(--gold-accent) !important;
-  box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.2) !important;
+/* --- MODO OSCURO (CORREGIDO) --- */
+.dark-mode .auth-card {
+  background: var(--dark-card) !important;
+  border: 1px solid var(--gold) !important;
+  color: #ffffff !important;
 }
 
-/* Etiquetas (Labels) en Dorado */
-.dark-mode label { 
-  color: var(--gold-accent) !important; 
-  letter-spacing: 0.5px;
+/* Forzar que todos los textos sean legibles en blanco */
+.dark-mode h2, .dark-mode h3, .dark-mode p, .dark-mode .h4 {
+  color: #ffffff !important;
 }
 
-/* Pestañas en Modo Oscuro */
 .dark-mode .auth-toggle-container { 
-  border-color: #30363d; 
-  background-color: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.1); 
 }
 
-.dark-mode .auth-toggle-btn {
-  color: #8b949e;
+.dark-mode label { 
+  color: var(--gold) !important; 
 }
 
-.dark-mode .auth-toggle-btn.active {
-  background-color: var(--gold-accent) !important;
-  color: #000000 !important; /* Texto negro sobre dorado para contraste */
-  box-shadow: 0 4px 15px rgba(197, 160, 89, 0.4);
+.dark-mode .custom-input {
+  background: #ffffff !important;
+  border-color: #f8f8f8 !important;
+  color: rgb(255, 255, 255) !important;
 }
 
-/* Botón "Enviar" cambia a Dorado en Dark Mode */
-.dark-mode .btn-primary-auth {
-  background-color: var(--gold-accent) !important;
-  color: #000000 !important;
-  font-weight: 800 !important;
+/* Tab activo en modo oscuro */
+.dark-mode .auth-toggle-btn.active { 
+  background: var(--gold); 
+  color: #000 !important; 
 }
 
-/* Contenedor del Logo */
-.bg-white-circle {
-  background-color: white;
-  padding: 15px;
+/* Botón principal */
+.btn-primary-auth {
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+body:not(.dark-mode) .btn-primary-auth {
+  background: var(--primary) !important;
+  color: white !important;
+}
+
+.dark-mode .btn-primary-auth { 
+  background: var(--gold) !important; 
+  color: #000 !important; 
+}
+
+/* Fix para el logo en modo oscuro */
+.dark-mode .bg-white-circle {
+  padding: 10px;
   border-radius: 50%;
   display: inline-block;
-  box-shadow: 0 0 20px rgba(255,255,255,0.1);
-}
-
-/* Iconos de Input */
-.dark-mode .input-group-text {
-  border-color: #30363d !important;
-  color: var(--gold-accent) !important;
 }

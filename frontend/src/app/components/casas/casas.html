@@ -1,1 +1,121 @@
-<p>casas works!</p>
+<div class="main-wrapper p-4">
+  <div class="container">
+    
+    <div class="card mb-4 shadow-sm border-0 overflow-hidden">
+      <div class="card-header text-white d-flex justify-content-between align-items-center transition-all" 
+           [ngClass]="editando ? 'bg-warning text-dark' : 'bg-success'">
+        <h5 class="mb-0">
+          <i class="fas me-2" [ngClass]="editando ? 'fa-edit' : 'fa-plus-circle'"></i>
+          {{ editando ? 'Modificar Propiedad' : 'Registrar Nueva Propiedad' }}
+        </h5>
+        <span *ngIf="editando" class="badge bg-dark">Modo Edición Activo</span>
+      </div>
+      <div class="card-body bg-white">
+        <div class="row g-3">
+          <div class="col-md-2">
+            <label class="form-label fw-bold text-secondary small">NÚMERO DE CASA</label>
+            <input type="text" [(ngModel)]="nuevaCasa.numero_casa" class="form-control form-control-sm border-2" placeholder="Ej: B-102">
+          </div>
+          <div class="col-md-2">
+            <label class="form-label fw-bold text-secondary small">ÁREA / BLOQUE</label>
+            <select [(ngModel)]="nuevaCasa.id_area" class="form-select form-select-sm border-2">
+              <option value="" disabled selected>Seleccionar...</option>
+              <option *ngFor="let area of areas" [value]="area.id_area">{{ area.nombre }}</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label fw-bold text-secondary small">PROPIETARIO</label>
+            <input type="text" [(ngModel)]="nuevaCasa.propietario" class="form-control form-control-sm border-2" placeholder="Nombre completo">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label fw-bold text-secondary small">TELÉFONO CONTACTO</label>
+            <input type="text" [(ngModel)]="nuevaCasa.telefono" class="form-control form-control-sm border-2" placeholder="0000-0000">
+          </div>
+          <div class="col-md-2 d-flex align-items-end gap-2">
+            <button class="btn btn-sm w-100 shadow-sm fw-bold" 
+                    [ngClass]="editando ? 'btn-warning' : 'btn-primary'" 
+                    (click)="guardarCasa()">
+              <i class="fas me-2" [ngClass]="editando ? 'fa-sync' : 'fa-save'"></i>
+              {{ editando ? 'Actualizar' : 'Guardar' }}
+            </button>
+            
+            <button *ngIf="editando" class="btn btn-sm btn-secondary shadow-sm" (click)="cancelarEdicion()" title="Cancelar edición">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card shadow border-0">
+      <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3">
+        <h5 class="mb-0"><i class="fas fa-home me-2 text-gold"></i>GESTIÓN DE CASAS</h5>
+        <div class="d-flex align-items-center gap-3">
+          <div class="input-group input-group-sm">
+            <span class="input-group-text bg-light border-end-0"><i class="fas fa-search text-muted"></i></span>
+            <input type="text" [(ngModel)]="searchText" class="form-control border-start-0" placeholder="Buscar casa o dueño...">
+          </div>
+          <span class="badge bg-primary rounded-pill px-3">{{ casasFiltradas.length }} Registros</span>
+        </div>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th class="ps-3 border-0">Casa #</th>
+                <th class="border-0">Área / Bloque</th>
+                <th class="border-0">Propietario</th>
+                <th class="border-0">Teléfono</th>
+                <th class="border-0">Estado</th>
+                <th class="text-center border-0">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let casa of casasFiltradas" class="animate-fade-in">
+                <td class="ps-3 fw-bold text-primary">{{ casa.numero_casa }}</td>
+                <td><span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25">{{ casa.nombre_area || 'Sin Área' }}</span></td>
+                <td class="fw-semibold text-dark">{{ casa.propietario || '---' }}</td>
+                <td>
+                  <ng-container *ngIf="casa.telefono; else noTel">
+                    <a [href]="'tel:' + casa.telefono" class="text-decoration-none text-dark hover-gold">
+                      <i class="fas fa-phone-alt me-2 text-success small"></i>{{ casa.telefono }}
+                    </a>
+                  </ng-container>
+                  <ng-template #noTel><span class="text-muted small">Sin teléfono</span></ng-template>
+                </td>
+                <td>
+                  <span class="badge rounded-pill px-3 py-2" [ngClass]="casa.estado === 'ocupada' ? 'bg-success' : 'bg-danger'">
+                    {{ casa.estado | uppercase }}
+                  </span>
+                </td>
+                <td class="text-center">
+                  <div class="btn-group shadow-sm">
+                    <button class="btn btn-outline-info btn-sm border-2" (click)="prepararEditar(casa)" title="Editar">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm border-2" 
+                            [ngClass]="casa.estado === 'ocupada' ? 'btn-outline-danger' : 'btn-outline-success'"
+                            (click)="toggleEstado(casa)"
+                            [title]="casa.estado === 'ocupada' ? 'Marcar como DESOCUPADA' : 'Marcar como OCUPADA'">
+                      <i class="fas" [ngClass]="casa.estado === 'ocupada' ? 'fa-user-slash' : 'fa-user-check'"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              
+              <tr *ngIf="casasFiltradas.length === 0">
+                <td colspan="6" class="text-center py-5">
+                  <i class="fas fa-search-minus fa-3x text-muted mb-3"></i>
+                  <p class="text-muted fw-bold">No se encontraron casas que coincidan con "{{searchText}}"</p>
+                  <button class="btn btn-sm btn-outline-primary" (click)="searchText = ''">Limpiar búsqueda</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

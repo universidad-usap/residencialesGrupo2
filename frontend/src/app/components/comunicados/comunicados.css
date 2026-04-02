@@ -1,0 +1,42 @@
+/* Estilos para las tarjetas de comunicados */
+.card-comunicado {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-top: 5px solid transparent !important; /* Definido por ngClass */
+}
+
+.card-comunicado:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+/* Colores de borde superior para prioridad */
+.border-top-success { border-top-color: #198754 !important; }
+.border-top-primary { border-top-color: #007bff !important; }
+.border-top-danger { border-top-color: #dc3545 !important; }
+
+/* Ajustes para el texto en las tarjetas */
+.card-title {
+    font-size: 1.1rem;
+    margin-top: 10px;
+    line-height: 1.3;
+}
+
+.card-text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Compatibilidad con el Modo Oscuro (Verde Bosque de fondo) */
+body.dark-mode .main-wrapper {
+    background-color: transparent !important; /* Hereda el verde del styles.css */
+}
+
+/* Mantener tarjetas blancas para contraste según diseño de Áreas */
+body.dark-mode .card {
+    background-color: #ffffff !important;
+}
+
+body.dark-mode .text-secondary, 
+body.dark-mode .card-title {
+    color: #212529 !important;
+}

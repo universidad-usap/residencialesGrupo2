@@ -12,6 +12,7 @@
   --gris-input: #2a2a2a;
   --azul-luna: #007bff; 
   --borde-oscuro: rgba(255, 255, 255, 0.1);
+  --texto-oscuro: #212529;
 }
 
 /* --- CONFIGURACIÓN BASE --- */
@@ -22,7 +23,6 @@ body {
   background-color: var(--crema-claro);
 }
 
-/* Evita que el scroll del fondo se mueva cuando el modal está abierto */
 body.modal-open {
   overflow: hidden !important;
 }
@@ -33,53 +33,76 @@ body.dark-mode {
   color: var(--crema-claro) !important;
 }
 
-/* --- 🚨 CORRECCIÓN DEFINITIVA DE CAPAS (MODALES) 🚨 --- */
-
-/* 1. Fondo protector (Backdrop): Debe ser muy oscuro para tapar el login */
+/* --- MODALES --- */
 .modal-backdrop {
   background-color: #000000 !important;
-  opacity: 0.9 !important; /* Casi opaco para bloquear la vista del fondo */
+  opacity: 0.9 !important;
   z-index: 1040 !important;
 }
 
-/* 2. Contenedor del Modal: Forzar fondo sólido para evitar transparencia */
 .modal {
-  z-index: 1060 !important; /* Por encima del backdrop */
+  z-index: 1060 !important;
 }
 
 .modal-content {
   background-color: var(--blanco) !important;
-  color: var(--verde-oscuro) !important;
-  border: 2px solid #c5a059 !important; /* Borde dorado para definir límites */
+  color: var(--texto-oscuro) !important;
+  border: 2px solid #c5a059 !important;
   box-shadow: 0 20px 60px rgba(0,0,0,0.8) !important;
   border-radius: 20px !important;
-  opacity: 1 !important; /* Forzar opacidad máxima */
+  opacity: 1 !important;
 }
 
-/* Ajuste del Modal para Modo Oscuro */
 body.dark-mode .modal-content {
-  background-color: var(--gris-card) !important;
-  color: var(--crema-claro) !important;
-  border: 1px solid var(--borde-oscuro) !important;
+  background-color: var(--blanco) !important; /* Mantenemos blanco para legibilidad como en Áreas */
+  color: var(--texto-oscuro) !important;
 }
 
-/* --- FORMULARIOS E INPUTS --- */
+/* --- FORMULARIOS E INPUTS (EL CAMBIO CLAVE) --- */
 
-/* Separación de etiquetas para evitar que se amontonen */
 .form-label, label {
   display: block !important;
   margin-bottom: 8px !important;
-  margin-top: 12px !important; /* Espacio extra arriba de cada etiqueta */
+  margin-top: 12px !important;
   font-weight: 700 !important;
   text-transform: uppercase;
   font-size: 0.8rem;
+  color: inherit;
 }
 
-body.dark-mode .form-control, 
-body.dark-mode input {
+/* Forzar que los inputs dentro de CARDS y MODALES siempre sean legibles */
+.card .form-control, 
+.card .form-select,
+.modal-content .form-control {
+  background-color: var(--blanco) !important;
+  color: var(--texto-oscuro) !important;
+  border: 1px solid #ced4da !important;
+}
+
+/* Solo aplicar el fondo oscuro a inputs que ESTÉN FUERA de una card (si existen) */
+body.dark-mode input:not(.card input):not(.modal input) {
   background-color: var(--gris-input) !important;
   color: var(--blanco) !important;
   border: 1px solid #444444 !important;
+}
+
+/* Asegurar visibilidad del placeholder */
+.form-control::placeholder {
+  color: #6c757d !important;
+  opacity: 0.8;
+}
+
+/* --- CARDS EN MODO OSCURO --- */
+body.dark-mode .card {
+  background-color: var(--blanco) !important; /* Card blanca sobre fondo verde oscuro */
+  color: var(--texto-oscuro) !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
+}
+
+/* Texto de labels dentro de cards en modo oscuro */
+body.dark-mode .card .form-label {
+  color: var(--texto-oscuro) !important;
 }
 
 /* --- UTILIDADES --- */
@@ -91,7 +114,6 @@ body.dark-mode img[src*="logo"] {
   filter: invert(1) brightness(2) !important;
 }
 
-/* Estilo para botón de registro */
 .btn-login-submit {
   border-radius: 12px !important;
   transition: transform 0.2s;

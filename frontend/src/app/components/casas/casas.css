@@ -1,0 +1,39 @@
+/* --- CORRECCIÓN DE INPUTS EN MODO OSCURO --- */
+
+/* Forzar que los inputs y selects sean legibles */
+body.dark-mode .form-control, 
+body.dark-mode .form-select {
+    background-color: #ffffff !important; /* Fondo blanco para que el texto negro se vea siempre */
+    color: #212529 !important;           /* Texto oscuro */
+    border: 1px solid #ced4da !important;
+}
+
+/* Estilo específico para el placeholder (el texto de ejemplo) */
+body.dark-mode .form-control::placeholder {
+    color: #6c757d !important;
+    opacity: 1;
+}
+
+/* --- CORRECCIÓN DEL BUSCADOR --- */
+body.dark-mode .input-group-text {
+    background-color: #f8f9fa !important;
+    border-color: #dee2e6 !important;
+    color: #495057 !important;
+}
+
+/* --- AJUSTE DE CONTENEDORES --- */
+
+/* Aseguramos que la tarjeta de registro no absorba el fondo verde oscuro */
+body.dark-mode .card {
+    background-color: #ffffff !important;
+}
+
+/* Etiquetas (labels) siempre oscuras sobre el fondo blanco de la card */
+body.dark-mode .form-label {
+    color: #495057 !important;
+}
+
+/* Texto de la tabla */
+body.dark-mode .table td {
+    color: #212529 !important;
+}

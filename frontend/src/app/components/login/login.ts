@@ -13,20 +13,20 @@ import Swal from 'sweetalert2';
   styleUrl: './login.css'
 })
 export class LoginComponent implements OnInit {
+  // Estados de la interfaz
+  public isRegistering: boolean = false;
+  public showPassword = false;
+  public isDarkMode = false; // Cambiado a false por defecto para priorizar legibilidad inicial
 
-  // --- VARIABLES DE ESTADO ---
-  public isRegistering: boolean = false; // Controla el switch entre Login y Registro
-  public showPassword = false; 
-  public isDarkMode = true; 
-
+  // Modelos de datos
   loginData = { usuario: '', password: '' };
   registerData = { nombre: '', usuario: '', password: '', adminCode: '' };
 
   constructor(
-    private apiService: ApiService, 
+    private apiService: ApiService,
     private router: Router,
     private renderer: Renderer2,
-    private cdr: ChangeDetectorRef, 
+    private cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -34,18 +34,15 @@ export class LoginComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('usuarioLogueado');
       
-      // Recuperar preferencia de tema
+      // Recuperar tema guardado o usar claro por defecto
       const savedTheme = localStorage.getItem('theme');
-      this.isDarkMode = savedTheme ? savedTheme === 'dark' : true;
+      this.isDarkMode = savedTheme === 'dark'; 
+      
       this.applyTheme();
     }
   }
 
-  // --- INTERFAZ Y TEMA ---
-  togglePassword() {
-    this.showPassword = !this.showPassword;
-  }
-
+  // Cambiar entre modo claro y oscuro
   toggleTheme() {
     this.isDarkMode = !this.isDarkMode;
     if (isPlatformBrowser(this.platformId)) {
@@ -54,93 +51,81 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  // Mostrar/Ocultar contraseña (Resuelve error TS2339)
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
   private applyTheme() {
     if (isPlatformBrowser(this.platformId)) {
-      // Colores de fondo para el body (Oscuro Profundo vs Crema Suave)
-      const darkColor = '#0a100a'; 
-      const lightColor = '#f4f1ec'; 
-      const targetColor = this.isDarkMode ? darkColor : lightColor;
-
+      // Colores de fondo para el body según el modo
+      const color = this.isDarkMode ? '#0a0f0a' : '#f4f1ec';
+      
       if (this.isDarkMode) {
         this.renderer.addClass(document.body, 'dark-mode');
       } else {
         this.renderer.removeClass(document.body, 'dark-mode');
       }
       
-      this.renderer.setStyle(document.documentElement, 'background-color', targetColor);
-      this.renderer.setStyle(document.body, 'background-color', targetColor);
+      this.renderer.setStyle(document.body, 'background-color', color);
     }
   }
 
-  // --- LÓGICA DE LOGIN ---
   ejecutarLogin() {
     if (!this.loginData.usuario || !this.loginData.password) {
-      this.mostrarMensaje('warning', 'Atención', 'Por favor, ingresa tus credenciales.');
+      this.mostrarMensaje('warning', 'Atención', 'Por favor complete todos los campos.');
       return;
     }
 
     this.apiService.login(this.loginData).subscribe({
       next: (res: any) => {
         if (res.auth) {
-          if (isPlatformBrowser(this.platformId)) {
-            localStorage.setItem('usuarioLogueado', JSON.stringify(res.user));
-          }
-          this.mostrarMensaje('success', `¡Bienvenido, ${res.user.nombre}!`, 'Accediendo al sistema...');
-          setTimeout(() => this.router.navigate(['/casas']), 1500);
+          localStorage.setItem('usuarioLogueado', JSON.stringify(res.user));
+          this.router.navigate(['/casas']);
         } else {
-          this.mostrarMensaje('error', 'Fallo de Autenticación', res.message || 'Usuario o contraseña incorrectos.');
+          this.mostrarMensaje('error', 'Error de acceso', res.message || 'Credenciales incorrectas');
         }
       },
-      error: () => this.mostrarMensaje('error', 'Error de Conexión', 'No se pudo contactar con el servidor.')
+      error: () => this.mostrarMensaje('error', 'Error', 'No se pudo conectar con el servidor')
     });
   }
 
-  // --- LÓGICA DE REGISTRO ---
   ejecutarRegistro() {
+    // Validación básica antes de enviar
     if (!this.registerData.nombre || !this.registerData.usuario || !this.registerData.password) {
-      this.mostrarMensaje('warning', 'Campos requeridos', 'Completa el nombre, usuario y contraseña.');
+      this.mostrarMensaje('warning', 'Atención', 'Todos los campos son obligatorios.');
       return;
     }
 
-    const rolAsignado = this.registerData.adminCode === 'ANGEL2026' ? 'ADMIN' : 'RESIDENTE';
-    const nuevoUsuario = { ...this.registerData, rol: rolAsignado };
-
-    this.apiService.saveUsuario(nuevoUsuario).subscribe({
+    const rol = this.registerData.adminCode === 'ANGEL2026' ? 'ADMIN' : 'RESIDENTE';
+    
+    this.apiService.saveUsuario({ ...this.registerData, rol }).subscribe({
       next: () => {
-        this.mostrarMensaje('success', '¡Registro Exitoso!', 'Tu cuenta ha sido creada. Ahora inicia sesión.');
-        this.isRegistering = false; // Regresa al login automáticamente
-        this.limpiarFormularios();
+        this.mostrarMensaje('success', '¡Registro Exitoso!', 'Su cuenta ha sido creada. Ya puede iniciar sesión.');
+        
+        // Reset de formulario y cambio a pestaña de login
+        this.isRegistering = false; 
+        this.registerData = { nombre: '', usuario: '', password: '', adminCode: '' };
         this.cdr.detectChanges();
       },
       error: (err) => {
-        console.error('Error:', err);
-        this.mostrarMensaje('error', 'Error en el Registro', 'El usuario ya existe o los datos son incorrectos.');
+        console.error(err);
+        this.mostrarMensaje('error', 'Error de Registro', 'El nombre de usuario ya existe o los datos son inválidos.');
       }
     });
-  }
-
-  private limpiarFormularios() {
-    this.registerData = { nombre: '', usuario: '', password: '', adminCode: '' };
-    this.loginData = { usuario: '', password: '' };
   }
 
   private mostrarMensaje(icon: any, title: string, text: string) {
     if (isPlatformBrowser(this.platformId)) {
       Swal.fire({
-        icon, 
-        title, 
+        icon,
+        title,
         text,
-        // Colores de SweetAlert adaptados al Modo Oscuro Premium
-        background: this.isDarkMode ? '#1a1a1a' : '#ffffff',
-        color: this.isDarkMode ? '#ffffff' : '#222222',
-        confirmButtonColor: '#c5a059', // Dorado para resaltar
-        timer: 2500,
-        timerProgressBar: true
+        // Adaptar colores de SweetAlert al modo actual
+        background: this.isDarkMode ? '#1a1d1a' : '#ffffff',
+        color: this.isDarkMode ? '#ffffff' : '#1b1b1b',
+        confirmButtonColor: '#c5a059'
       });
     }
-  }
-
-  olvidePassword() {
-    this.mostrarMensaje('info', 'Gestión de Cuentas', 'Comunícate con la administración para resetear tu clave.');
   }
 }

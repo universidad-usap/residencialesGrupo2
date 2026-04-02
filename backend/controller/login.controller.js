@@ -4,7 +4,6 @@ const controller = {};
 controller.login = (req, res) => {
     const { usuario, password } = req.body;
 
-    // LOG DE CONTROL: Para ver qué llega desde Angular
     console.log("Intento de login con:", { usuario, password });
 
     req.getConnection((err, conn) => {
@@ -37,19 +36,28 @@ controller.login = (req, res) => {
     });
 };
 
-// 2. Crear Nuevo Usuario
+// 2. Crear Nuevo Usuario (CORREGIDO PARA EVITAR ER_BAD_FIELD_ERROR)
 controller.save = (req, res) => {
-    const data = req.body;
-    console.log("Registrando nuevo usuario:", data);
+    // Extraemos solo los campos que existen en la tabla de MySQL
+    // Ignoramos 'adminCode' ya que MySQL no tiene esa columna
+    const { nombre, usuario, password, rol } = req.body;
+    
+    // Creamos un objeto limpio para la inserción
+    const nuevoUsuario = { nombre, usuario, password, rol };
+
+    console.log("Registrando nuevo usuario (limpio):", nuevoUsuario);
 
     req.getConnection((err, conn) => {
         if (err) return res.status(500).json(err);
 
-        conn.query('INSERT INTO usuarios SET ?', [data], (err, result) => {
+        // Usamos el objeto filtrado 'nuevoUsuario' en lugar de 'req.body'
+        conn.query('INSERT INTO usuarios SET ?', [nuevoUsuario], (err, result) => {
             if (err) {
+                console.error("Error al insertar:", err);
                 if (err.code === 'ER_DUP_ENTRY') {
                     return res.status(400).json({ message: "El nombre de usuario ya existe" });
                 }
+                // Esto capturará cualquier otro error de campo mal escrito
                 return res.status(500).json(err);
             }
             res.json({ message: "Usuario creado exitosamente" });
