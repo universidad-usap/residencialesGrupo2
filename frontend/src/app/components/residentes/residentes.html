@@ -32,14 +32,6 @@
           <option *ngFor="let casa of casas" [value]="casa.id_casa">{{ casa.numero_casa }}</option>
         </select>
       </div>
-      <div class="col-6 col-md-2">
-        <label class="form-label">Tipo</label>
-        <select [(ngModel)]="nuevoResidente.tipo" class="form-select">
-          <option value="propietario">Propietario</option>
-          <option value="familiar">Familiar</option>
-          <option value="inquilino">Inquilino</option>
-        </select>
-      </div>
       <div class="col-12 col-md-2 d-flex align-items-end gap-2">
         <button class="btn w-100"
                 [ngClass]="editando ? 'btn-warning' : 'btn-primary'" 
