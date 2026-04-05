@@ -30,6 +30,7 @@ app.use(myConnection(mysql, {
 // 4. Importar las nuevas Rutas
 const areasRoutes = require('./rotes/areas');
 const casasRoutes = require('./rotes/casas');
+const residentesRoutes = require('./rotes/residentes');
 const serviciosRoutes = require('./rotes/servicios');
 const comunicadosRoutes = require('./rotes/comunicados');
 const loginRoutes = require('./rotes/login');
@@ -37,6 +38,7 @@ const loginRoutes = require('./rotes/login');
 // 5. Usar las Rutas (Endpoints)
 app.use('/api/areas', areasRoutes);
 app.use('/api/casas', casasRoutes);
+app.use('/api/residentes', residentesRoutes);
 app.use('/api/servicios', serviciosRoutes);
 app.use('/api/comunicados', comunicadosRoutes);
 app.use('/api/login', loginRoutes);

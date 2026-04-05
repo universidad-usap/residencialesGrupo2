@@ -61,6 +61,25 @@ export class ApiService {
   }
 
   // ==========================================
+  //                RESIDENTES
+  // ==========================================
+  getResidentes(): Observable<any> {
+    return this.http.get(`${this.API_URI}/residentes`);
+  }
+
+  saveResidente(residente: any): Observable<any> {
+    return this.http.post(`${this.API_URI}/residentes`, residente);
+  }
+
+  updateResidente(id: any, residente: any): Observable<any> {
+    return this.http.put(`${this.API_URI}/residentes/${id}`, residente);
+  }
+
+  deleteResidente(id: any): Observable<any> {
+    return this.http.delete(`${this.API_URI}/residentes/${id}`);
+  }
+
+  // ==========================================
   //                COMUNICADOS
   // ==========================================
   getComunicados(): Observable<any> {

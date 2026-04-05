@@ -1,0 +1,61 @@
+body.dark-mode .form-control,
+body.dark-mode .form-select {
+  background-color: #ffffff !important;
+  color: #212529 !important;
+  border: 1px solid #ced4da !important;
+}
+
+body.dark-mode .form-control::placeholder {
+  color: #6c757d !important;
+  opacity: 1;
+}
+
+body.dark-mode .input-group-text {
+  background-color: #f8f9fa !important;
+  border-color: #dee2e6 !important;
+  color: #495057 !important;
+}
+
+body.dark-mode .card {
+  background-color: #ffffff !important;
+}
+
+body.dark-mode .form-label {
+  color: #495057 !important;
+}
+
+body.dark-mode .table td {
+  color: #212529 !important;
+}
+
+.transition-all {
+  transition: all 0.3s ease;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f8f9fa !important;
+  cursor: pointer;
+}
+
+.hover-gold:hover {
+  color: #c5a059 !important;
+}
+
+.text-gold {
+  color: #c5a059;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
