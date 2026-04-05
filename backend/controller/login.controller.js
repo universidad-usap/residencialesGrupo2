@@ -42,6 +42,14 @@ controller.save = (req, res) => {
     // Ignoramos 'adminCode' ya que MySQL no tiene esa columna
     const { nombre, usuario, password } = req.body;
     
+    // Validación de campos requeridos
+    if (!nombre || !usuario || !password) {
+        console.log("Registro rechazado - Campos faltantes:", { nombre: !!nombre, usuario: !!usuario, password: !!password });
+        return res.status(400).json({ 
+            message: "Todos los campos son obligatorios (nombre, usuario y contraseña)" 
+        });
+    }
+    
     // Creamos un objeto limpio para la inserción
     const nuevoUsuario = { nombre, usuario, password };
 

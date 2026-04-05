@@ -65,9 +65,9 @@
           </div>
 
           <div class="mb-4" *ngIf="isRegistering">
-            <label class="form-label fw-bold">Código de Autorización (Opcional)</label>
+            <label class="form-label fw-bold">Código de Autorización</label>
             <input type="password" [(ngModel)]="registerData.adminCode" name="regAdmin" 
-                   class="form-control custom-input" placeholder="Solo para personal">
+                   class="form-control custom-input" placeholder="Solo para personal" required>
           </div>
 
           <button type="submit" class="btn btn-primary-auth w-100 py-3 fw-bold mt-2 shadow-sm"

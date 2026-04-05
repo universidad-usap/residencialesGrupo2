@@ -92,8 +92,8 @@ export class LoginComponent implements OnInit {
 
   ejecutarRegistro() {
     // Validación básica antes de enviar
-    if (!this.registerData.nombre || !this.registerData.usuario || !this.registerData.password) {
-      this.mostrarMensaje('warning', 'Atención', 'Todos los campos son obligatorios.');
+    if (!this.registerData.nombre || !this.registerData.usuario || !this.registerData.password || !this.registerData.adminCode) {
+      this.mostrarMensaje('warning', 'Atención', 'Todos los campos son obligatorios, incluyendo el código de autorización.');
       return;
     }
 
