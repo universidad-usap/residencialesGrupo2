@@ -1,0 +1,75 @@
+/* QR Overlay */
+.qr-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.qr-modal {
+  background: var(--card-bg, #fff);
+  border-radius: 16px;
+  width: 340px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.qr-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  font-weight: 600;
+  font-size: 1rem;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+}
+
+.btn-close-modal {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted, #888);
+  font-size: 1rem;
+}
+
+.qr-modal-body {
+  padding: 24px 20px;
+  text-align: center;
+}
+
+.qr-visitante-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text-color, #222);
+}
+
+.qr-image-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.qr-token-text {
+  font-size: 0.65rem;
+  color: var(--text-muted, #aaa);
+  word-break: break-all;
+  margin: 0;
+}
+
+.qr-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--border-color, #e0e0e0);
+}

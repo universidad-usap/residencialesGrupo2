@@ -34,6 +34,8 @@ const residentesRoutes = require('./rotes/residentes');
 const serviciosRoutes = require('./rotes/servicios');
 const comunicadosRoutes = require('./rotes/comunicados');
 const loginRoutes = require('./rotes/login');
+const visitasRoutes = require('./rotes/visitas');
+const accesosRoutes = require('./rotes/accesos');
 
 // 5. Usar las Rutas (Endpoints)
 app.use('/api/areas', areasRoutes);
@@ -42,6 +44,8 @@ app.use('/api/residentes', residentesRoutes);
 app.use('/api/servicios', serviciosRoutes);
 app.use('/api/comunicados', comunicadosRoutes);
 app.use('/api/login', loginRoutes);
+app.use('/api/visitas', visitasRoutes);
+app.use('/api/accesos', accesosRoutes);
 
 // 6. Servidor
 app.listen(app.get('port'), () => {

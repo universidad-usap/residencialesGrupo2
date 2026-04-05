@@ -1,0 +1,103 @@
+.scanner-wrapper {
+  border: 2px dashed var(--border-color, #ccc);
+  border-radius: 12px;
+  overflow: hidden;
+  min-height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.3s;
+}
+
+.scanner-wrapper.active {
+  border-color: var(--bs-primary, #0d6efd);
+  border-style: solid;
+}
+
+.qr-reader-box {
+  width: 100%;
+}
+
+.qr-reader-box.hidden {
+  display: none;
+}
+
+.scanner-placeholder {
+  text-align: center;
+  color: var(--text-muted, #aaa);
+  padding: 32px;
+}
+
+.scanner-placeholder i {
+  font-size: 3.5rem;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.scanner-placeholder p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Result cards */
+.result-card {
+  border-radius: 16px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  color: #fff;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-10px); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+
+.result-ok     { background: linear-gradient(135deg, #28a745, #20c997); }
+.result-denied { background: linear-gradient(135deg, #dc3545, #e07b00); }
+
+.result-icon { font-size: 2.5rem; }
+
+.result-body h4 { margin: 0 0 4px; font-size: 1.3rem; }
+
+.result-msg { opacity: 0.9; margin: 0 0 12px; }
+
+.result-details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.result-detail-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+  background: rgba(255,255,255,0.15);
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+.result-detail-row i { width: 16px; text-align: center; }
+
+/* Idle state */
+.result-idle {
+  border: 2px dashed var(--border-color, #ccc);
+  border-radius: 16px;
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--text-muted, #aaa);
+}
+
+.result-idle i {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.result-idle p { font-size: 1.1rem; margin: 0 0 4px; }
+.result-idle span { font-size: 0.85rem; }

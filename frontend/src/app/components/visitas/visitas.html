@@ -1,0 +1,132 @@
+<div class="page-container">
+
+  <!-- Form Section -->
+  <div class="form-section">
+    <div class="form-section-title">
+      <i class="fas fa-user-check"></i> Registrar Nueva Visita
+    </div>
+
+    <div class="row g-3">
+      <div class="col-12 col-md-3">
+        <label class="form-label">Nombre del Visitante *</label>
+        <input type="text" [(ngModel)]="nuevaVisita.nombre" class="form-control" placeholder="Nombre completo">
+      </div>
+      <div class="col-12 col-md-2">
+        <label class="form-label">Identidad *</label>
+        <input type="text" [(ngModel)]="nuevaVisita.identidad" class="form-control" placeholder="0000-0000-00000">
+      </div>
+      <div class="col-6 col-md-2">
+        <label class="form-label">Teléfono</label>
+        <input type="text" [(ngModel)]="nuevaVisita.telefono" class="form-control" placeholder="0000-0000">
+      </div>
+      <div class="col-6 col-md-2">
+        <label class="form-label">Placa del Vehículo</label>
+        <input type="text" [(ngModel)]="nuevaVisita.placa_vehiculo" class="form-control" placeholder="ABC-1234">
+      </div>
+      <div class="col-6 col-md-2">
+        <label class="form-label">Tipo de Visita</label>
+        <select [(ngModel)]="nuevaVisita.id_tipo" class="form-select">
+          <option value="">Sin tipo</option>
+          <option *ngFor="let t of tiposVisita" [value]="t.id_tipo">{{ t.nombre }}</option>
+        </select>
+      </div>
+      <div class="col-6 col-md-1 d-flex align-items-end">
+        <button class="btn btn-primary w-100" (click)="registrarVisita()">
+          <i class="fas fa-qrcode"></i> Generar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR Modal Overlay -->
+  <div class="qr-overlay" *ngIf="qrVisible" (click)="cerrarQR()">
+    <div class="qr-modal" (click)="$event.stopPropagation()">
+      <div class="qr-modal-header">
+        <i class="fas fa-qrcode me-2"></i> Código QR de Acceso
+        <button class="btn-close-modal" (click)="cerrarQR()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="qr-modal-body">
+        <p class="qr-visitante-name">{{ qrVisitaNombre }}</p>
+        <div id="qr-print-area" class="qr-image-wrapper">
+          <qrcode
+            [qrdata]="qrToken"
+            [width]="250"
+            [errorCorrectionLevel]="'M'"
+            [elementType]="'img'">
+          </qrcode>
+        </div>
+        <p class="qr-token-text">{{ qrToken }}</p>
+      </div>
+      <div class="qr-modal-footer">
+        <button class="btn btn-outline-secondary btn-sm" (click)="imprimirQR()">
+          <i class="fas fa-print me-1"></i> Imprimir
+        </button>
+        <button class="btn btn-primary btn-sm" (click)="cerrarQR()">
+          <i class="fas fa-check me-1"></i> Listo
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Table -->
+  <div class="data-table-card">
+    <div class="data-table-header">
+      <div class="data-table-title">
+        <i class="fas fa-clipboard-list"></i> Registro de Visitas
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <div class="search-bar">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" [(ngModel)]="searchText" class="form-control" placeholder="Buscar visitante...">
+        </div>
+        <span class="record-count">{{ visitasFiltradas.length }} Registros</span>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Visitante</th>
+            <th>Identidad</th>
+            <th>Teléfono</th>
+            <th>Placa</th>
+            <th>Tipo</th>
+            <th>Estado QR</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="visitasFiltradas.length === 0">
+            <td colspan="8" class="text-center py-4 text-muted">
+              <i class="fas fa-inbox me-2"></i>No hay visitas registradas
+            </td>
+          </tr>
+          <tr *ngFor="let v of visitasFiltradas">
+            <td>{{ v.id_visita }}</td>
+            <td><strong>{{ v.nombre }}</strong></td>
+            <td>{{ v.identidad }}</td>
+            <td>{{ v.telefono || '—' }}</td>
+            <td>{{ v.placa_vehiculo || '—' }}</td>
+            <td>{{ v.tipo_nombre || '—' }}</td>
+            <td><span [class]="getEstadoBadge(v.estado_qr)">{{ v.estado_qr || '—' }}</span></td>
+            <td>
+              <div class="d-flex gap-1">
+                <button class="btn btn-sm btn-outline-primary" (click)="mostrarQR(v)" title="Ver QR">
+                  <i class="fas fa-qrcode"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-warning" (click)="regenerarQR(v)" title="Regenerar QR">
+                  <i class="fas fa-sync-alt"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" (click)="eliminarVisita(v.id_visita)" title="Eliminar">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

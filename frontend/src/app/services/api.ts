@@ -124,7 +124,41 @@ export class ApiService {
   updateEstadoPago(id: any, estado: any): Observable<any> {
     return this.http.put(`${this.API_URI}/servicios/pagos/${id}`, { estado });
   }
-  getPagosPorCasa(id: number) {
-  return this.http.get(`${this.API_URI}/pagos/casa/${id}`);
+  getPagosPorCasa(id: number): Observable<any> {
+    return this.http.get(`${this.API_URI}/pagos/casa/${id}`);
+  }
+
+  // ==========================================
+  //                VISITAS / QR
+  // ==========================================
+  getVisitas(): Observable<any> {
+    return this.http.get(`${this.API_URI}/visitas`);
+  }
+
+  getTiposVisita(): Observable<any> {
+    return this.http.get(`${this.API_URI}/visitas/tipos`);
+  }
+
+  saveVisita(visita: any): Observable<any> {
+    return this.http.post(`${this.API_URI}/visitas`, visita);
+  }
+
+  deleteVisita(id: any): Observable<any> {
+    return this.http.delete(`${this.API_URI}/visitas/${id}`);
+  }
+
+  regenerarQR(id_visita: any): Observable<any> {
+    return this.http.put(`${this.API_URI}/visitas/${id_visita}/regenerar-qr`, {});
+  }
+
+  // ==========================================
+  //                ACCESOS
+  // ==========================================
+  validarQR(data: { codigo_token: string; guardia_id?: number }): Observable<any> {
+    return this.http.post(`${this.API_URI}/accesos/validar`, data);
+  }
+
+  getAccesos(): Observable<any> {
+    return this.http.get(`${this.API_URI}/accesos`);
   }
 }
