@@ -8,6 +8,7 @@ import { ServiciosComponent } from './components/servicios/servicios';
 import { ComunicadosComponent } from './components/comunicados/comunicados';
 import { VisitasComponent } from './components/visitas/visitas';
 import { ValidacionComponent } from './components/validacion/validacion';
+import { UsuariosComponent } from './components/usuarios/usuarios';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -18,5 +19,6 @@ export const routes: Routes = [
   { path: 'comunicados', component: ComunicadosComponent },
   { path: 'visitas', component: VisitasComponent },
   { path: 'validacion', component: ValidacionComponent },
+  { path: 'usuarios', component: UsuariosComponent },
   { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];

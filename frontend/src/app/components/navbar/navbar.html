@@ -83,6 +83,23 @@
       </div>
     </div>
 
+    <!-- Administración (solo ADMIN) -->
+    <div class="nav-section" *ngIf="isAdmin()">
+      <button class="section-header" (click)="toggleSection('administracion')">
+        <div class="section-header-left">
+          <i class="fas fa-cog section-icon"></i>
+          <span class="section-label">Administración</span>
+        </div>
+        <i class="fas fa-chevron-down section-arrow" [class.rotated]="!isSectionExpanded('administracion')"></i>
+      </button>
+      <div class="section-links" [class.collapsed]="!isSectionExpanded('administracion')">
+        <a routerLink="/usuarios" routerLinkActive="active" class="nav-link">
+          <i class="fas fa-users-cog nav-link-icon"></i>
+          <span class="nav-link-label">Gestión de Usuarios</span>
+        </a>
+      </div>
+    </div>
+
   </nav>
 
   <!-- Footer -->

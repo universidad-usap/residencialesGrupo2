@@ -22,7 +22,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private themeSub!: Subscription;
 
   isCollapsed: boolean = false;
-  expandedSections: Set<string> = new Set(['mantenimientos', 'informacion', 'accesos']);
+  expandedSections: Set<string> = new Set(['mantenimientos', 'informacion', 'accesos', 'administracion']);
 
   @HostBinding('class.sidebar-collapsed')
   get collapsedClass() { return this.isCollapsed; }
@@ -71,6 +71,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
       localStorage.removeItem('usuarioLogueado');
     }
     this.router.navigate(['/login']);
+  }
+
+  isAdmin(): boolean {
+    if (isPlatformBrowser(this.platformId)) {
+      const session = localStorage.getItem('usuarioLogueado');
+      if (session) {
+        try {
+          return JSON.parse(session)?.rol === 'ADMIN';
+        } catch { return false; }
+      }
+    }
+    return false;
   }
 
   ngOnDestroy() {

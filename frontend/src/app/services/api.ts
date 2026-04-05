@@ -22,6 +22,14 @@ export class ApiService {
     return this.http.post(`${this.API_URI}/login/save`, usuarioData);
   }
 
+  getUsuarios(): Observable<any> {
+    return this.http.get(`${this.API_URI}/login/list`);
+  }
+
+  deleteUsuario(id: any): Observable<any> {
+    return this.http.delete(`${this.API_URI}/login/${id}`);
+  }
+
   // ==========================================
   //                ÁREAS
   // ==========================================

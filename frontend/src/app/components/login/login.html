@@ -1,87 +1,57 @@
-<div [class.dark-mode]="isDarkMode" class="login-wrapper">
-  
+﻿<div [class.dark-mode]="isDarkMode" class="login-wrapper">
   <button class="theme-toggle" (click)="toggleTheme()" type="button">
     <i class="fas" [ngClass]="isDarkMode ? 'fa-sun' : 'fa-moon'"></i>
   </button>
 
   <div class="login-card-container">
     <div class="login-card">
-      
       <div class="login-logo">
         <div class="logo-wrapper">
-          <img src="img/logo.png" width="80" alt="Logo Residenciales">
+          <img src="img/logo.png" width="80" alt="Logo Residenciales" />
         </div>
-        <h1 class="login-brand">Valle del Ángel</h1>
-        <p class="login-subtitle">Sistema de Gestión Residencial</p>
+        <h1 class="login-brand">Valle del Angel</h1>
+        <p class="login-subtitle">Sistema de Gestion Residencial</p>
       </div>
 
-      <div class="auth-tabs">
-        <button type="button" class="auth-tab"
-                [class.active]="!isRegistering" 
-                (click)="isRegistering = false">
-          Iniciar Sesión
-        </button>
-        <button type="button" class="auth-tab"
-                [class.active]="isRegistering" 
-                (click)="isRegistering = true">
-          Registrarse
-        </button>
-      </div>
-
-      <form (ngSubmit)="isRegistering ? ejecutarRegistro() : ejecutarLogin()" #authForm="ngForm" class="login-form">
-        
-        <div class="form-group" *ngIf="isRegistering">
-          <label class="form-label">Nombre Completo</label>
-          <div class="input-wrapper">
-            <i class="fas fa-user input-icon"></i>
-            <input type="text" [(ngModel)]="registerData.nombre" name="regNombre" 
-                   class="form-control form-input" required placeholder="Ej: Juan Pérez">
-          </div>
-        </div>
-
+      <form (ngSubmit)="ejecutarLogin()" #authForm="ngForm" class="login-form">
         <div class="form-group">
           <label class="form-label">Usuario</label>
           <div class="input-wrapper">
             <i class="fas fa-at input-icon"></i>
-            <input *ngIf="!isRegistering" type="text" [(ngModel)]="loginData.usuario" 
-                   name="loginU" class="form-control form-input" required placeholder="Tu usuario">
-            <input *ngIf="isRegistering" type="text" [(ngModel)]="registerData.usuario" 
-                   name="regU" class="form-control form-input" required placeholder="Crea un usuario">
+            <input
+              type="text"
+              [(ngModel)]="loginData.usuario"
+              name="loginU"
+              class="form-control form-input"
+              required
+              placeholder="Tu usuario"
+            />
           </div>
         </div>
 
         <div class="form-group">
-          <label class="form-label">Contraseña</label>
+          <label class="form-label">Contrasena</label>
           <div class="input-wrapper">
             <i class="fas fa-lock input-icon"></i>
-            <input *ngIf="!isRegistering" [type]="showPassword ? 'text' : 'password'" 
-                   [(ngModel)]="loginData.password" name="loginP" 
-                   class="form-control form-input" required placeholder="••••••••">
-            <input *ngIf="isRegistering" [type]="showPassword ? 'text' : 'password'" 
-                   [(ngModel)]="registerData.password" name="regP" 
-                   class="form-control form-input" required placeholder="Mínimo 6 caracteres">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              [(ngModel)]="loginData.password"
+              name="loginP"
+              class="form-control form-input"
+              required
+              placeholder="........"
+            />
             <button class="password-toggle" type="button" (click)="togglePassword()">
               <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
             </button>
           </div>
         </div>
 
-        <div class="form-group" *ngIf="isRegistering">
-          <label class="form-label">Código de Autorización</label>
-          <div class="input-wrapper">
-            <i class="fas fa-shield-alt input-icon"></i>
-            <input type="password" [(ngModel)]="registerData.adminCode" name="regAdmin" 
-                   class="form-control form-input" placeholder="Solo para personal" required>
-          </div>
-        </div>
-
-        <button type="submit" class="btn-login-submit"
-                [disabled]="!authForm.valid">
-          {{ isRegistering ? 'Crear Cuenta' : 'Iniciar Sesión' }}
+        <button type="submit" class="btn-login-submit" [disabled]="!authForm.valid">
+          Iniciar Sesion
           <i class="fas fa-arrow-right"></i>
         </button>
       </form>
-
     </div>
   </div>
 </div>

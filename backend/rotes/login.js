@@ -11,4 +11,7 @@ router.post('/save', loginController.save);
 // Ruta para listar usuarios
 router.get('/list', loginController.list);
 
+// Ruta para eliminar usuario
+router.delete('/:id', loginController.delete);
+
 module.exports = router;

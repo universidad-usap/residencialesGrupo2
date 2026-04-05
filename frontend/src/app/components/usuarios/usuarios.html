@@ -1,0 +1,119 @@
+<div class="page-container">
+  <!-- Form Section -->
+  <div class="form-section">
+    <div class="form-section-title">
+      <i class="fas fa-user-plus"></i>
+      Crear Nuevo Usuario
+    </div>
+
+    <div class="row g-3">
+      <div class="col-12 col-md-3">
+        <label class="form-label">Nombre Completo</label>
+        <input
+          type="text"
+          [(ngModel)]="nuevoUsuario.nombre"
+          class="form-control"
+          placeholder="Ej: Juan Pérez"
+        />
+      </div>
+      <div class="col-12 col-md-3">
+        <label class="form-label">Nombre de Usuario</label>
+        <input
+          type="text"
+          [(ngModel)]="nuevoUsuario.usuario"
+          class="form-control"
+          placeholder="Ej: j.perez"
+        />
+      </div>
+      <div class="col-12 col-md-3">
+        <label class="form-label">Contraseña</label>
+        <input
+          type="password"
+          [(ngModel)]="nuevoUsuario.password"
+          class="form-control"
+          placeholder="Mínimo 6 caracteres"
+        />
+      </div>
+      <div class="col-6 col-md-2">
+        <label class="form-label">Rol</label>
+        <select [(ngModel)]="nuevoUsuario.rol" class="form-select">
+          <option value="GUARDIA">Guardia</option>
+          <option value="ADMIN">Admin</option>
+        </select>
+      </div>
+      <div class="col-6 col-md-1 d-flex align-items-end">
+        <button class="btn btn-primary w-100" (click)="guardarUsuario()">
+          <i class="fas fa-save"></i>
+          Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table Section -->
+  <div class="table-section">
+    <div class="table-header">
+      <h5 class="table-title">
+        <i class="fas fa-users"></i>
+        Usuarios del Sistema
+        <span class="badge bg-secondary ms-2">{{ usuarios.length }}</span>
+      </h5>
+      <div class="search-wrapper">
+        <i class="fas fa-search search-icon"></i>
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          class="form-control search-input"
+          placeholder="Buscar por nombre, usuario o rol..."
+        />
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Usuario</th>
+            <th>Rol</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of usuariosFiltrados; let i = index">
+            <td class="text-muted">{{ i + 1 }}</td>
+            <td>{{ u.nombre }}</td>
+            <td>
+              <code>{{ u.usuario }}</code>
+            </td>
+            <td>
+              <span class="badge" [ngClass]="u.rol === 'ADMIN' ? 'bg-danger' : 'bg-primary'">
+                <i
+                  class="fas"
+                  [ngClass]="u.rol === 'ADMIN' ? 'fa-shield-alt' : 'fa-user-shield'"
+                ></i>
+                {{ u.rol }}
+              </span>
+            </td>
+            <td class="text-center">
+              <button
+                class="btn btn-sm btn-outline-danger"
+                (click)="eliminarUsuario(u.id_usuario, u.usuario)"
+                title="Eliminar usuario"
+              >
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="usuariosFiltrados.length === 0">
+            <td colspan="5" class="text-center text-muted py-4">
+              <i class="fas fa-inbox fa-2x d-block mb-2"></i>
+              No se encontraron usuarios.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
