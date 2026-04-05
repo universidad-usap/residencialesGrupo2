@@ -112,12 +112,6 @@ export class ApiService {
     return this.http.put(`${this.API_URI}/servicios/catalogo/${id}`, servicio);
   }
 
-  // Cambiar estado Activo/Inactivo del servicio
-  updateEstadoServicio(id: any, estado: string): Observable<any> {
-    // CORRECCIÓN: Se cambió URI_API por API_URI
-    return this.http.put(`${this.API_URI}/servicios/estado/${id}`, { estado });
-  }
-
   /** CONTROL DE PAGOS */
   getPagos(): Observable<any> {
     return this.http.get(`${this.API_URI}/servicios/pagos`);

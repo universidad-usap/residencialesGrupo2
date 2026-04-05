@@ -15,10 +15,6 @@ router.post('/catalogo', serviciosController.saveService);
 // ACTUALIZAR datos de un servicio (Nombre, Descripción, Costo)
 router.put('/catalogo/:id', serviciosController.updateService);
 
-// CAMBIAR ESTADO de un servicio (Activo/Inactivo)
-router.put('/estado/:id', serviciosController.updateServiceStatus);
-
-
 // ==========================================
 // RUTAS PARA GESTIÓN DE PAGOS
 // ==========================================

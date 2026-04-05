@@ -120,65 +120,46 @@ export class ServiciosComponent implements OnInit {
     });
   }
 
-  toggleEstadoServicio(servicio: any) {
-    const nuevoEstado = servicio.estado === 'Activo' ? 'Inactivo' : 'Activo';
-    
-    this.apiService.updateEstadoServicio(servicio.id_servicio, nuevoEstado).subscribe(
-      res => {
-        Swal.fire({
-          title: `Servicio ${nuevoEstado}`,
-          icon: 'success',
-          toast: true,
-          position: 'top-end',
-          showConfirmButton: false,
-          timer: 3000
-        });
-        this.cargarServicios();
-      },
-      err => Swal.fire('Error', 'No se pudo cambiar el estado', 'error')
+  exportarServiciosExcel() {
+    const data = this.servicios.map((servicio: any) => ({
+      'Nombre': servicio.nombre,
+      'Descripción': servicio.descripcion,
+      'Costo': servicio.costo
+    }));
+
+    this.exportService.exportToExcel(data, 'reporte_servicios', 'Servicios');
+  }
+
+  exportarServiciosPdf() {
+    const headers = ['Nombre', 'Descripción', 'Costo'];
+
+    const rows = this.servicios.map((servicio: any) => [
+      servicio.nombre || '',
+      servicio.descripcion || '',
+      servicio.costo || 0
+    ]);
+
+    this.exportService.exportToPdf(
+      'Reporte de Servicios',
+      headers,
+      rows,
+      'reporte_servicios'
     );
   }
-  exportarServiciosExcel() {
-  const data = this.servicios.map((servicio: any) => ({
-    'Nombre': servicio.nombre,
-    'Descripción': servicio.descripcion,
-    'Costo': servicio.costo,
-    'Estado': servicio.estado
-  }));
-
-  this.exportService.exportToExcel(data, 'reporte_servicios', 'Servicios');
-}
-exportarServiciosPdf() {
-  const headers = ['Nombre', 'Descripción', 'Costo', 'Estado'];
-
-  const rows = this.servicios.map((servicio: any) => [
-    servicio.nombre || '',
-    servicio.descripcion || '',
-    servicio.costo || 0,
-    servicio.estado || ''
-  ]);
-
-  this.exportService.exportToPdf(
-    'Reporte de Servicios',
-    headers,
-    rows,
-    'reporte_servicios'
-  );
-}
 
   // ==========================================
   //         LÓGICA DE PAGOS
   // ==========================================
 
   cargarPagos() {
-  this.apiService.getPagos().subscribe(
-    (res: any) => {
-      this.pagos = [...res];
-      this.cd.detectChanges();
-    },
-    (err: any) => console.error(err)
-  );
-}
+    this.apiService.getPagos().subscribe(
+      (res: any) => {
+        this.pagos = [...res];
+        this.cd.detectChanges();
+      },
+      (err: any) => console.error(err)
+    );
+  }
 
   cargarCasas() {
     this.apiService.getCasas().subscribe(
@@ -225,37 +206,39 @@ exportarServiciosPdf() {
       default: return 'bg-secondary';
     }
   }
+
   exportarPagosExcel() {
-  const data = this.pagos.map((pago: any) => ({
-    'Casa': pago.numero_casa,
-    'Servicio': pago.nombre_servicio,
-    'Monto': pago.monto,
-    'Estado': pago.estado,
-    'Fecha de Pago': pago.fecha_pago
-      ? new Date(pago.fecha_pago).toLocaleDateString('es-HN')
-      : ''
-  }));
+    const data = this.pagos.map((pago: any) => ({
+      'Casa': pago.numero_casa,
+      'Servicio': pago.nombre_servicio,
+      'Monto': pago.monto,
+      'Estado': pago.estado,
+      'Fecha de Pago': pago.fecha_pago
+        ? new Date(pago.fecha_pago).toLocaleDateString('es-HN')
+        : ''
+    }));
 
-  this.exportService.exportToExcel(data, 'reporte_pagos', 'Pagos');
-}
-exportarPagosPdf() {
-  const headers = ['Casa', 'Servicio', 'Monto', 'Estado', 'Fecha de Pago'];
+    this.exportService.exportToExcel(data, 'reporte_pagos', 'Pagos');
+  }
 
-  const rows = this.pagos.map((pago: any) => [
-    pago.numero_casa || '',
-    pago.nombre_servicio || '',
-    pago.monto || 0,
-    pago.estado || '',
-    pago.fecha_pago
-      ? new Date(pago.fecha_pago).toLocaleDateString('es-HN')
-      : ''
-  ]);
+  exportarPagosPdf() {
+    const headers = ['Casa', 'Servicio', 'Monto', 'Estado', 'Fecha de Pago'];
 
-  this.exportService.exportToPdf(
-    'Reporte de Pagos',
-    headers,
-    rows,
-    'reporte_pagos'
-  );
-}
+    const rows = this.pagos.map((pago: any) => [
+      pago.numero_casa || '',
+      pago.nombre_servicio || '',
+      pago.monto || 0,
+      pago.estado || '',
+      pago.fecha_pago
+        ? new Date(pago.fecha_pago).toLocaleDateString('es-HN')
+        : ''
+    ]);
+
+    this.exportService.exportToPdf(
+      'Reporte de Pagos',
+      headers,
+      rows,
+      'reporte_pagos'
+    );
+  }
 }

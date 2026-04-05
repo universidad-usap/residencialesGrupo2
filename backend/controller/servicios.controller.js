@@ -6,8 +6,7 @@ controller.listCatalog = (req, res) => {
     req.getConnection((err, conn) => {
         if (err) return res.status(500).json({ message: "Error de conexión" });
         
-        // Incluimos la columna 'estado' para que el botón de activar/desactivar funcione
-        conn.query('SELECT id_servicio, nombre, descripcion, costo, estado FROM servicios', (err, servicios) => {
+        conn.query('SELECT id_servicio, nombre, descripcion, costo FROM servicios', (err, servicios) => {
             if (err) {
                 console.error("Error SQL en listCatalog:", err);
                 return res.status(500).json({ error: err.message });
@@ -18,9 +17,7 @@ controller.listCatalog = (req, res) => {
 };
 
 controller.saveService = (req, res) => {
-    const data = req.body; 
-    // Por defecto, un servicio nuevo se crea como 'Activo'
-    if (!data.estado) data.estado = 'Activo';
+    const data = req.body;
 
     req.getConnection((err, conn) => {
         if (err) return res.status(500).json({ message: "Error de conexión" });
@@ -42,20 +39,6 @@ controller.updateService = (req, res) => {
         [nombre, descripcion, costo, id], (err, rows) => {
             if (err) return res.status(500).json({ error: err.message });
             res.json({ message: "Servicio actualizado correctamente" });
-        });
-    });
-};
-
-// NUEVO: Cambiar estado (Activo/Inactivo)
-controller.updateServiceStatus = (req, res) => {
-    const { id } = req.params;
-    const { estado } = req.body;
-    
-    req.getConnection((err, conn) => {
-        if (err) return res.status(500).json({ message: "Error de conexión" });
-        conn.query('UPDATE servicios SET estado = ? WHERE id_servicio = ?', [estado, id], (err, rows) => {
-            if (err) return res.status(500).json({ error: err.message });
-            res.json({ message: "Estado del servicio actualizado" });
         });
     });
 };

@@ -94,7 +94,6 @@
             <th>Casa</th>
             <th>Servicio</th>
             <th>Monto</th>
-            <th>Estado</th>
             <th class="text-center">Acciones</th>
           </tr>
         </thead>
@@ -176,9 +175,7 @@
             <th>Nombre</th>
             <th>Descripción</th>
             <th>Costo Base</th>
-            <th>Estado</th>
             <th>Modificar</th>
-            <th class="text-center">Control</th>
           </tr>
         </thead>
         <tbody>
@@ -189,22 +186,8 @@
             <td class="text-success fw-bold">L. {{s.costo}}</td>
 
             <td>
-              <span class="badge" [ngClass]="s.estado === 'Activo' ? 'bg-success' : 'bg-secondary'">
-                {{s.estado || 'Activo'}}
-              </span>
-            </td>
-
-            <td>
               <button class="btn btn-outline-info btn-sm fw-bold" (click)="editarServicio(s)">
                 <i class="fas fa-edit me-1"></i> Editar
-              </button>
-            </td>
-
-            <td class="text-center">
-              <button [class]="s.estado === 'Inactivo' ? 'btn btn-success btn-sm w-100' : 'btn btn-danger btn-sm w-100'"
-                      (click)="toggleEstadoServicio(s)">
-                <i [class]="s.estado === 'Inactivo' ? 'fas fa-check-circle me-1' : 'fas fa-times-circle me-1'"></i>
-                {{ s.estado === 'Inactivo' ? 'Activar' : 'Desactivar' }}
               </button>
             </td>
           </tr>
