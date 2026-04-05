@@ -12,7 +12,7 @@ import { ExportService } from '../../services/export.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './residentes.html',
-  styleUrl: './residentes.css'
+  styleUrl: './residentes.css',
 })
 export class Residentes implements OnInit {
   public residentes: any[] = [];
@@ -21,7 +21,6 @@ export class Residentes implements OnInit {
   public isDarkMode: boolean = false;
   public user: any = null;
 
-  // Estados de edición
   public editando: boolean = false;
   public idSeleccionado: any = null;
 
@@ -31,7 +30,7 @@ export class Residentes implements OnInit {
     telefono: '',
     email: '',
     id_casa: '',
-    tipo: 'familiar'
+    tipo: 'familiar',
   };
 
   constructor(
@@ -39,7 +38,7 @@ export class Residentes implements OnInit {
     private router: Router,
     private cd: ChangeDetectorRef,
     private exportService: ExportService,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
   ) {}
 
   ngOnInit(): void {
@@ -63,14 +62,14 @@ export class Residentes implements OnInit {
         this.residentes = [...res];
         this.cd.detectChanges();
       },
-      error: (err: any) => console.error("Error al cargar residentes:", err)
+      error: (err: any) => console.error('Error al cargar residentes:', err),
     });
   }
 
   cargarCasas() {
     this.apiService.getCasas().subscribe({
-      next: (res: any) => this.casas = res,
-      error: (err: any) => console.error("Error al cargar casas:", err)
+      next: (res: any) => (this.casas = res),
+      error: (err: any) => console.error('Error al cargar casas:', err),
     });
   }
 
@@ -80,7 +79,7 @@ export class Residentes implements OnInit {
         icon: 'warning',
         title: 'Campos obligatorios',
         text: 'El nombre y apellido son necesarios.',
-        confirmButtonColor: '#c5a059'
+        confirmButtonColor: '#c5a059',
       });
       return;
     }
@@ -90,41 +89,57 @@ export class Residentes implements OnInit {
         icon: 'warning',
         title: 'Campos obligatorios',
         text: 'Debe seleccionar una casa.',
-        confirmButtonColor: '#c5a059'
+        confirmButtonColor: '#c5a059',
       });
       return;
     }
 
+    const datosResidente = {
+      ...this.nuevoResidente,
+      id_casa: Number(this.nuevoResidente.id_casa),
+    };
+
     if (this.editando) {
-      this.apiService.updateResidente(this.idSeleccionado, this.nuevoResidente).subscribe({
+      this.apiService.updateResidente(this.idSeleccionado, datosResidente).subscribe({
         next: () => {
           Swal.fire('¡Actualizado!', 'Los datos se modificaron correctamente.', 'success');
           this.cancelarEdicion();
           this.cargarResidentes();
         },
-        error: (err: any) => Swal.fire('Error', 'No se pudo actualizar la información.', 'error')
+        error: (err: any) => {
+          console.error('Error al actualizar:', err);
+          const mensaje = err.error?.error || 'No se pudo actualizar la información.';
+          Swal.fire('Error', mensaje, 'error');
+        },
       });
     } else {
-      this.apiService.saveResidente(this.nuevoResidente).subscribe({
+      this.apiService.saveResidente(datosResidente).subscribe({
         next: (res: any) => {
+          console.log('Residente guardado:', res);
           Swal.fire({
             icon: 'success',
             title: '¡Registrado!',
             text: 'El residente se guardó correctamente.',
             timer: 2000,
-            showConfirmButton: false
+            showConfirmButton: false,
           });
           this.cargarResidentes();
           this.limpiarFormulario();
         },
         error: (err: any) => {
-          console.error(err);
-          Swal.fire('Error', 'No se pudo guardar en la base de datos.', 'error');
-        }
+          console.error('Error completo al guardar:', err);
+          const mensaje =
+            err.error?.error || err.error?.message || 'No se pudo guardar en la base de datos.';
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al guardar',
+            text: mensaje,
+            confirmButtonColor: '#d33',
+          });
+        },
       });
     }
   }
-
 
   prepararEditar(residente: any) {
     this.editando = true;
@@ -135,7 +150,7 @@ export class Residentes implements OnInit {
       telefono: residente.telefono,
       email: residente.email,
       id_casa: residente.id_casa,
-      tipo: residente.tipo
+      tipo: residente.tipo,
     };
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -149,7 +164,7 @@ export class Residentes implements OnInit {
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
       confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
         this.apiService.deleteResidente(residente.id_residente).subscribe({
@@ -160,7 +175,7 @@ export class Residentes implements OnInit {
           error: (err: any) => {
             console.error(err);
             Swal.fire('Error', 'No se pudo eliminar el residente.', 'error');
-          }
+          },
         });
       }
     });
@@ -179,19 +194,20 @@ export class Residentes implements OnInit {
       telefono: '',
       email: '',
       id_casa: '',
-      tipo: 'familiar'
+      tipo: 'familiar',
     };
   }
 
   get residentesFiltrados() {
     if (!this.searchText) return this.residentes;
     const search = this.searchText.toLowerCase();
-    return this.residentes.filter(residente =>
-      residente.nombre?.toLowerCase().includes(search) ||
-      residente.apellido?.toLowerCase().includes(search) ||
-      residente.email?.toLowerCase().includes(search) ||
-      residente.numero_casa?.toLowerCase().includes(search) ||
-      residente.tipo?.toLowerCase().includes(search)
+    return this.residentes.filter(
+      (residente) =>
+        residente.nombre?.toLowerCase().includes(search) ||
+        residente.apellido?.toLowerCase().includes(search) ||
+        residente.email?.toLowerCase().includes(search) ||
+        residente.numero_casa?.toLowerCase().includes(search) ||
+        residente.tipo?.toLowerCase().includes(search),
     );
   }
 
@@ -204,12 +220,12 @@ export class Residentes implements OnInit {
 
   exportarResidentesExcel() {
     const data = this.residentesFiltrados.map((residente: any) => ({
-      'Nombre': residente.nombre,
-      'Apellido': residente.apellido,
-      'Teléfono': residente.telefono || '',
-      'Email': residente.email || '',
+      Nombre: residente.nombre,
+      Apellido: residente.apellido,
+      Teléfono: residente.telefono || '',
+      Email: residente.email || '',
       'Casa #': residente.numero_casa || '',
-      'Tipo': residente.tipo
+      Tipo: residente.tipo,
     }));
 
     this.exportService.exportToExcel(data, 'reporte_residentes', 'Residentes');
@@ -224,23 +240,22 @@ export class Residentes implements OnInit {
       residente.telefono || '',
       residente.email || '',
       residente.numero_casa || '',
-      residente.tipo || ''
+      residente.tipo || '',
     ]);
 
-    this.exportService.exportToPdf(
-      'Reporte de Residentes',
-      headers,
-      rows,
-      'reporte_residentes'
-    );
+    this.exportService.exportToPdf('Reporte de Residentes', headers, rows, 'reporte_residentes');
   }
 
   getTipoBadgeClass(tipo: string): string {
-    switch(tipo?.toLowerCase()) {
-      case 'propietario': return 'bg-success';
-      case 'familiar': return 'bg-info';
-      case 'inquilino': return 'bg-warning';
-      default: return 'bg-secondary';
+    switch (tipo?.toLowerCase()) {
+      case 'propietario':
+        return 'bg-success';
+      case 'familiar':
+        return 'bg-info';
+      case 'inquilino':
+        return 'bg-warning';
+      default:
+        return 'bg-secondary';
     }
   }
 }

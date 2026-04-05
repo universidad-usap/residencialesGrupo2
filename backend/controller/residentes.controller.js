@@ -27,16 +27,57 @@ controller.list = (req, res) => {
 controller.save = (req, res) => {
     const data = req.body;
 
+    if (!data.nombre || !data.apellido) {
+        return res.status(400).json({ error: 'El nombre y apellido son obligatorios' });
+    }
+
+    if (!data.id_casa) {
+        return res.status(400).json({ error: 'Debe seleccionar una casa' });
+    }
+
+    const idCasa = parseInt(data.id_casa);
+    if (isNaN(idCasa)) {
+        return res.status(400).json({ error: 'El ID de la casa debe ser un número válido' });
+    }
+
+    console.log('Guardando residente:', data);
+
     req.getConnection((err, conn) => {
         if (err) {
+            console.error('Error de conexión:', err);
             return res.status(500).json({ error: 'Error de conexión a la base de datos' });
         }
 
-        conn.query('INSERT INTO residentes SET ?', [data], (err, result) => {
+        conn.query('SELECT id_casa FROM casas WHERE id_casa = ?', [idCasa], (err, rows) => {
             if (err) {
-                return res.status(500).json({ error: 'Error al guardar residente', details: err });
+                console.error('Error al verificar casa:', err);
+                return res.status(500).json({ error: 'Error al verificar la casa' });
             }
-            res.json({ message: 'Residente guardado correctamente', id: result.insertId });
+
+            if (rows.length === 0) {
+                return res.status(400).json({ error: 'La casa seleccionada no existe' });
+            }
+
+            conn.query('INSERT INTO residentes SET ?', [data], (err, result) => {
+                if (err) {
+                    console.error('Error al insertar residente:', err);
+                    
+                    if (err.code === 'ER_DUP_ENTRY') {
+                        return res.status(400).json({ error: 'Ya existe un residente con estos datos' });
+                    }
+                    if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+                        return res.status(400).json({ error: 'La casa seleccionada no es válida' });
+                    }
+                    
+                    return res.status(500).json({ 
+                        error: 'Error al guardar residente', 
+                        message: err.message 
+                    });
+                }
+                
+                console.log('Residente guardado con ID:', result.insertId);
+                res.json({ message: 'Residente guardado correctamente', id: result.insertId });
+            });
         });
     });
 };
@@ -45,16 +86,48 @@ controller.update = (req, res) => {
     const { id_residente } = req.params;
     const data = req.body;
 
+    if (!data.nombre || !data.apellido) {
+        return res.status(400).json({ error: 'El nombre y apellido son obligatorios' });
+    }
+
+    if (!data.id_casa) {
+        return res.status(400).json({ error: 'Debe seleccionar una casa' });
+    }
+
+    console.log('Actualizando residente:', id_residente, data);
+
     req.getConnection((err, conn) => {
         if (err) {
+            console.error('Error de conexión:', err);
             return res.status(500).json({ error: 'Error de conexión a la base de datos' });
         }
 
-        conn.query('UPDATE residentes SET ? WHERE id_residente = ?', [data, id_residente], (err, result) => {
+        conn.query('SELECT id_casa FROM casas WHERE id_casa = ?', [data.id_casa], (err, rows) => {
             if (err) {
-                return res.status(500).json({ error: 'Error al actualizar residente', details: err });
+                console.error('Error al verificar casa:', err);
+                return res.status(500).json({ error: 'Error al verificar la casa' });
             }
-            res.json({ message: 'Residente actualizado correctamente' });
+
+            if (rows.length === 0) {
+                return res.status(400).json({ error: 'La casa seleccionada no existe' });
+            }
+
+            conn.query('UPDATE residentes SET ? WHERE id_residente = ?', [data, id_residente], (err, result) => {
+                if (err) {
+                    console.error('Error al actualizar residente:', err);
+                    return res.status(500).json({ 
+                        error: 'Error al actualizar residente', 
+                        message: err.message 
+                    });
+                }
+                
+                if (result.affectedRows === 0) {
+                    return res.status(404).json({ error: 'Residente no encontrado' });
+                }
+                
+                console.log('Residente actualizado:', id_residente);
+                res.json({ message: 'Residente actualizado correctamente' });
+            });
         });
     });
 };
