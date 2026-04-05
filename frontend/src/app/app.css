@@ -1,4 +1,13 @@
 .app-main {
-  padding-top: var(--navbar-height);
   min-height: 100vh;
+  margin-left: 0;
+  transition: margin-left 280ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+app-navbar.sidebar-visible ~ .app-main {
+  margin-left: 260px;
+}
+
+app-navbar.sidebar-visible.sidebar-collapsed ~ .app-main {
+  margin-left: 68px;
 }
