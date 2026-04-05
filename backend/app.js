@@ -20,9 +20,9 @@ app.use(express.json()); // CRÍTICO: Para que el backend entienda los datos que
 
 // 3. Conexión a la Nueva Base de Datos
 app.use(myConnection(mysql, {
-    host: 'localhost',
+    host: 'localhost' || "127.0.0.1",
     user: 'root',
-    password: 'admin200226' , // Pon tu contraseña de MySQL
+    password: 'admin123' , // Pon tu contraseña de MySQL
     port: 3306,
     database: 'residencial_qr'    // Tu nueva base de datos
 }, 'single'));
