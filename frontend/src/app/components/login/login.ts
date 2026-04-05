@@ -99,7 +99,7 @@ export class LoginComponent implements OnInit {
 
     const rol = this.registerData.adminCode === 'ANGEL2026' ? 'ADMIN' : 'RESIDENTE';
     
-    this.apiService.saveUsuario({ ...this.registerData, rol }).subscribe({
+    this.apiService.saveUsuario({ ...this.registerData}).subscribe({
       next: () => {
         this.mostrarMensaje('success', '¡Registro Exitoso!', 'Su cuenta ha sido creada. Ya puede iniciar sesión.');
         

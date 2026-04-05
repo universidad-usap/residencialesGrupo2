@@ -40,10 +40,10 @@ controller.login = (req, res) => {
 controller.save = (req, res) => {
     // Extraemos solo los campos que existen en la tabla de MySQL
     // Ignoramos 'adminCode' ya que MySQL no tiene esa columna
-    const { nombre, usuario, password, rol } = req.body;
+    const { nombre, usuario, password } = req.body;
     
     // Creamos un objeto limpio para la inserción
-    const nuevoUsuario = { nombre, usuario, password, rol };
+    const nuevoUsuario = { nombre, usuario, password };
 
     console.log("Registrando nuevo usuario (limpio):", nuevoUsuario);
 
