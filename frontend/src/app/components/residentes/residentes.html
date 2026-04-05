@@ -1,150 +1,140 @@
-<div class="main-wrapper p-4">
-  <div class="container">
-    
-    <div class="card mb-4 shadow-sm border-0 overflow-hidden">
-      <div class="card-header text-white d-flex justify-content-between align-items-center transition-all" 
-           [ngClass]="editando ? 'bg-warning text-dark' : 'bg-success'">
-        <h5 class="mb-0">
-          <i class="fas me-2" [ngClass]="editando ? 'fa-edit' : 'fa-user-plus'"></i>
-          {{ editando ? 'Modificar Residente' : 'Registrar Nuevo Residente' }}
-        </h5>
-        <span *ngIf="editando" class="badge bg-dark">Modo Edición Activo</span>
-      </div>
-      <div class="card-body bg-white">
-        <div class="row g-3">
-          <div class="col-md-3">
-            <label class="form-label fw-bold text-secondary small">NOMBRE</label>
-            <input type="text" [(ngModel)]="nuevoResidente.nombre" class="form-control form-control-sm border-2" placeholder="Nombre">
-          </div>
-          <div class="col-md-3">
-            <label class="form-label fw-bold text-secondary small">APELLIDO</label>
-            <input type="text" [(ngModel)]="nuevoResidente.apellido" class="form-control form-control-sm border-2" placeholder="Apellido">
-          </div>
-          <div class="col-md-2">
-            <label class="form-label fw-bold text-secondary small">TELÉFONO</label>
-            <input type="text" [(ngModel)]="nuevoResidente.telefono" class="form-control form-control-sm border-2" placeholder="0000-0000">
-          </div>
-          <div class="col-md-3">
-            <label class="form-label fw-bold text-secondary small">EMAIL</label>
-            <input type="email" [(ngModel)]="nuevoResidente.email" class="form-control form-control-sm border-2" placeholder="correo@ejemplo.com">
-          </div>
-          <div class="col-md-2">
-            <label class="form-label fw-bold text-secondary small">CASA #</label>
-            <select [(ngModel)]="nuevoResidente.id_casa" class="form-select form-select-sm border-2">
-              <option value="" disabled selected>Seleccionar...</option>
-              <option *ngFor="let casa of casas" [value]="casa.id_casa">{{ casa.numero_casa }}</option>
-            </select>
-          </div>
-          <div class="col-md-2">
-            <label class="form-label fw-bold text-secondary small">TIPO</label>
-            <select [(ngModel)]="nuevoResidente.tipo" class="form-select form-select-sm border-2">
-              <option value="propietario">Propietario</option>
-              <option value="familiar">Familiar</option>
-              <option value="inquilino">Inquilino</option>
-            </select>
-          </div>
-          <div class="col-md-2 d-flex align-items-end gap-2">
-            <button class="btn btn-sm w-100 shadow-sm fw-bold" 
-                    [ngClass]="editando ? 'btn-warning' : 'btn-primary'" 
-                    (click)="guardarResidente()">
-              <i class="fas me-2" [ngClass]="editando ? 'fa-sync' : 'fa-save'"></i>
-              {{ editando ? 'Actualizar' : 'Guardar' }}
-            </button>
-            
-            <button *ngIf="editando" class="btn btn-sm btn-secondary shadow-sm" (click)="cancelarEdicion()" title="Cancelar edición">
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
-        </div>
-      </div>
+<div class="page-container">
+  
+  <!-- Form Section -->
+  <div class="form-section" [class.editing]="editando">
+    <div class="form-section-title">
+      <i class="fas" [ngClass]="editando ? 'fa-edit' : 'fa-user-plus'"></i>
+      {{ editando ? 'Modificar Residente' : 'Registrar Nuevo Residente' }}
+      <span *ngIf="editando" class="badge bg-warning ms-2">Editando</span>
     </div>
 
-    <div class="card shadow border-0">
-      <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3">
-        <h5 class="mb-0"><i class="fas fa-users me-2 text-gold"></i>GESTIÓN DE RESIDENTES</h5>
-        <div class="d-flex align-items-center gap-2 flex-wrap">
-          <div class="input-group input-group-sm">
-            <span class="input-group-text bg-light border-end-0"><i class="fas fa-search text-muted"></i></span>
-            <input type="text" [(ngModel)]="searchText" class="form-control border-start-0" placeholder="Buscar residente...">
-          </div>
-
-          <button class="btn btn-success btn-sm fw-bold" (click)="exportarResidentesExcel()" title="Exportar a Excel">
-            <i class="fas fa-file-excel me-1"></i> Excel
-          </button>
-
-          <button class="btn btn-danger btn-sm fw-bold" (click)="exportarResidentesPdf()" title="Exportar a PDF">
-            <i class="fas fa-file-pdf me-1"></i> PDF
-          </button>
-
-          <span class="badge bg-primary rounded-pill px-3">{{ residentesFiltrados.length }} Registros</span>
-        </div>
+    <div class="row g-3">
+      <div class="col-6 col-md-3">
+        <label class="form-label">Nombre</label>
+        <input type="text" [(ngModel)]="nuevoResidente.nombre" class="form-control" placeholder="Nombre">
       </div>
-      <div class="card-body p-0">
-        <div class="table-responsive">
-          <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
-              <tr>
-                <th class="ps-3 border-0">Nombre Completo</th>
-                <th class="border-0">Teléfono</th>
-                <th class="border-0">Email</th>
-                <th class="border-0">Casa #</th>
-                <th class="border-0">Tipo</th>
-                <th class="text-center border-0">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let residente of residentesFiltrados" class="animate-fade-in">
-                <td class="ps-3 fw-bold text-primary">{{ residente.nombre }} {{ residente.apellido }}</td>
-                <td>
-                  <ng-container *ngIf="residente.telefono; else noTel">
-                    <a [href]="'tel:' + residente.telefono" class="text-decoration-none text-dark hover-gold">
-                      <i class="fas fa-phone-alt me-2 text-success small"></i>{{ residente.telefono }}
-                    </a>
-                  </ng-container>
-                  <ng-template #noTel><span class="text-muted small">Sin teléfono</span></ng-template>
-                </td>
-                <td>
-                  <ng-container *ngIf="residente.email; else noEmail">
-                    <a [href]="'mailto:' + residente.email" class="text-decoration-none text-dark hover-gold">
-                      <i class="fas fa-envelope me-2 text-info small"></i>{{ residente.email }}
-                    </a>
-                  </ng-container>
-                  <ng-template #noEmail><span class="text-muted small">Sin email</span></ng-template>
-                </td>
-                <td>
-                  <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25">
-                    {{ residente.numero_casa || 'Sin Casa' }}
-                  </span>
-                </td>
-                <td>
-                  <span class="badge rounded-pill px-3 py-2" [ngClass]="getTipoBadgeClass(residente.tipo)">
-                    {{ residente.tipo | uppercase }}
-                  </span>
-                </td>
-                <td class="text-center">
-                  <div class="btn-group shadow-sm">
-                    <button class="btn btn-outline-info btn-sm border-2" (click)="prepararEditar(residente)" title="Editar">
-                      <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn btn-outline-danger btn-sm border-2" (click)="eliminarResidente(residente)" title="Eliminar">
-                      <i class="fas fa-trash-alt"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              
-              <tr *ngIf="residentesFiltrados.length === 0">
-                <td colspan="6" class="text-center py-5">
-                  <i class="fas fa-search-minus fa-3x text-muted mb-3"></i>
-                  <p class="text-muted fw-bold">No se encontraron residentes que coincidan con "{{searchText}}"</p>
-                  <button class="btn btn-sm btn-outline-primary" (click)="searchText = ''">Limpiar búsqueda</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="col-6 col-md-3">
+        <label class="form-label">Apellido</label>
+        <input type="text" [(ngModel)]="nuevoResidente.apellido" class="form-control" placeholder="Apellido">
+      </div>
+      <div class="col-6 col-md-2">
+        <label class="form-label">Teléfono</label>
+        <input type="text" [(ngModel)]="nuevoResidente.telefono" class="form-control" placeholder="0000-0000">
+      </div>
+      <div class="col-12 col-md-3">
+        <label class="form-label">Email</label>
+        <input type="email" [(ngModel)]="nuevoResidente.email" class="form-control" placeholder="correo@ejemplo.com">
+      </div>
+      <div class="col-6 col-md-2">
+        <label class="form-label">Casa #</label>
+        <select [(ngModel)]="nuevoResidente.id_casa" class="form-select">
+          <option value="" disabled selected>Seleccionar...</option>
+          <option *ngFor="let casa of casas" [value]="casa.id_casa">{{ casa.numero_casa }}</option>
+        </select>
+      </div>
+      <div class="col-6 col-md-2">
+        <label class="form-label">Tipo</label>
+        <select [(ngModel)]="nuevoResidente.tipo" class="form-select">
+          <option value="propietario">Propietario</option>
+          <option value="familiar">Familiar</option>
+          <option value="inquilino">Inquilino</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-2 d-flex align-items-end gap-2">
+        <button class="btn w-100"
+                [ngClass]="editando ? 'btn-warning' : 'btn-primary'" 
+                (click)="guardarResidente()">
+          <i class="fas" [ngClass]="editando ? 'fa-sync' : 'fa-save'"></i>
+          {{ editando ? 'Actualizar' : 'Guardar' }}
+        </button>
+        <button *ngIf="editando" class="btn btn-secondary" (click)="cancelarEdicion()" title="Cancelar edición">
+          <i class="fas fa-times"></i>
+        </button>
       </div>
     </div>
-
   </div>
+
+  <!-- Data Table -->
+  <div class="data-table-card">
+    <div class="data-table-header">
+      <div class="data-table-title">
+        <i class="fas fa-users"></i> Gestión de Residentes
+      </div>
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        <div class="search-bar">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" [(ngModel)]="searchText" class="form-control" placeholder="Buscar residente...">
+        </div>
+        <button class="btn btn-outline-success btn-sm" (click)="exportarResidentesExcel()" title="Exportar a Excel">
+          <i class="fas fa-file-excel"></i>
+        </button>
+        <button class="btn btn-outline-danger btn-sm" (click)="exportarResidentesPdf()" title="Exportar a PDF">
+          <i class="fas fa-file-pdf"></i>
+        </button>
+        <span class="record-count">{{ residentesFiltrados.length }} Registros</span>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
+          <tr>
+            <th>Nombre Completo</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Casa #</th>
+            <th>Tipo</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let residente of residentesFiltrados" class="animate-fade-in">
+            <td class="fw-bold" style="color: var(--color-primary);">{{ residente.nombre }} {{ residente.apellido }}</td>
+            <td>
+              <ng-container *ngIf="residente.telefono; else noTel">
+                <a [href]="'tel:' + residente.telefono" class="text-decoration-none" style="color: var(--color-text);">
+                  <i class="fas fa-phone-alt me-1" style="color: var(--color-success); font-size: 0.75rem;"></i>{{ residente.telefono }}
+                </a>
+              </ng-container>
+              <ng-template #noTel><span class="text-muted small">Sin teléfono</span></ng-template>
+            </td>
+            <td>
+              <ng-container *ngIf="residente.email; else noEmail">
+                <a [href]="'mailto:' + residente.email" class="text-decoration-none" style="color: var(--color-text);">
+                  <i class="fas fa-envelope me-1" style="color: var(--color-info); font-size: 0.75rem;"></i>{{ residente.email }}
+                </a>
+              </ng-container>
+              <ng-template #noEmail><span class="text-muted small">Sin email</span></ng-template>
+            </td>
+            <td>
+              <span class="badge badge-soft-info">{{ residente.numero_casa || 'Sin Casa' }}</span>
+            </td>
+            <td>
+              <span class="badge" [ngClass]="getTipoBadgeClass(residente.tipo)">
+                {{ residente.tipo | uppercase }}
+              </span>
+            </td>
+            <td class="text-center">
+              <div class="btn-group">
+                <button class="btn btn-outline-info btn-sm" (click)="prepararEditar(residente)" title="Editar">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-outline-danger btn-sm" (click)="eliminarResidente(residente)" title="Eliminar">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          
+          <tr *ngIf="residentesFiltrados.length === 0">
+            <td colspan="6" class="empty-state">
+              <i class="fas fa-search-minus"></i>
+              <p>No se encontraron residentes que coincidan con "{{searchText}}"</p>
+              <button class="btn btn-sm btn-outline-primary" (click)="searchText = ''">Limpiar búsqueda</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
 </div>

@@ -1,42 +1,52 @@
-/* Estilos para las tarjetas de comunicados */
-.card-comunicado {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border-top: 5px solid transparent !important; /* Definido por ngClass */
+/* =============================================
+   COMUNICADOS — Card Styles
+   ============================================= */
+.comunicado-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-base), box-shadow var(--transition-base), background-color var(--transition-base), border-color var(--transition-base);
+  height: 100%;
+  border-left: 4px solid var(--color-border);
+  overflow: hidden;
 }
 
-.card-comunicado:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+.comunicado-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
 }
 
-/* Colores de borde superior para prioridad */
-.border-top-success { border-top-color: #198754 !important; }
-.border-top-primary { border-top-color: #007bff !important; }
-.border-top-danger { border-top-color: #dc3545 !important; }
+.comunicado-card.priority-success { border-left-color: var(--color-success); }
+.comunicado-card.priority-primary { border-left-color: var(--color-primary); }
+.comunicado-card.priority-danger { border-left-color: var(--color-danger); }
 
-/* Ajustes para el texto en las tarjetas */
-.card-title {
-    font-size: 1.1rem;
-    margin-top: 10px;
-    line-height: 1.3;
+.comunicado-card-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-.card-text {
-    font-size: 0.95rem;
-    line-height: 1.5;
+.comunicado-title {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
 }
 
-/* Compatibilidad con el Modo Oscuro (Verde Bosque de fondo) */
-body.dark-mode .main-wrapper {
-    background-color: transparent !important; /* Hereda el verde del styles.css */
+.comunicado-text {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  flex-grow: 1;
+  margin-bottom: 0;
 }
 
-/* Mantener tarjetas blancas para contraste según diseño de Áreas */
-body.dark-mode .card {
-    background-color: #ffffff !important;
-}
-
-body.dark-mode .text-secondary, 
-body.dark-mode .card-title {
-    color: #212529 !important;
+.comunicado-date {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-tertiary);
 }

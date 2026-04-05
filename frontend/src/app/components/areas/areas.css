@@ -1,4 +1,1 @@
-tbody tr:hover {
-  background: #f1f5f9;
-  transition: 0.2s;
-}
+/* Areas — component-specific styles only; globals handle the rest */

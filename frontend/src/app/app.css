@@ -1,0 +1,4 @@
+.app-main {
+  padding-top: var(--navbar-height);
+  min-height: 100vh;
+}
