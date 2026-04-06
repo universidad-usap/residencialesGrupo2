@@ -1,0 +1,8 @@
+[build]
+builder = "nixpacks"
+buildCommand = "cd backend && npm install"
+
+[deploy]
+startCommand = "cd backend && node index.js"
+healthcheckPath = "/api/areas"
+restartPolicyType = "on_failure"
