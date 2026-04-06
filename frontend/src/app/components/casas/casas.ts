@@ -16,7 +16,8 @@ import { ExportService } from '../../services/export.service';
 })
 export class CasasComponent implements OnInit {
   public casas: any[] = [];
-  public areas: any[] = []; 
+  public areas: any[] = [];
+  public residentes: any[] = [];
   public searchText: string = '';
   public isDarkMode: boolean = false;
   public user: any = null;
@@ -52,7 +53,8 @@ export class CasasComponent implements OnInit {
       this.isDarkMode = document.body.classList.contains('dark-mode');
 
       this.cargarCasas();
-      this.cargarAreas(); 
+      this.cargarAreas();
+      this.cargarResidentes();
     }
   }
 
@@ -71,6 +73,22 @@ export class CasasComponent implements OnInit {
       next: (res: any) => this.areas = res,
       error: (err: any) => console.error("Error al cargar áreas:", err)
     });
+  }
+
+  cargarResidentes() {
+    this.apiService.getResidentes().subscribe({
+      next: (res: any) => this.residentes = res,
+      error: (err: any) => console.error("Error al cargar residentes:", err)
+    });
+  }
+
+  onResidenteSeleccionado(nombre: string) {
+    const residente = this.residentes.find(
+      (r: any) => `${r.nombre} ${r.apellido}` === nombre
+    );
+    if (residente?.telefono) {
+      this.nuevaCasa.telefono = residente.telefono;
+    }
   }
 
   // --- LÓGICA DE GUARDAR / ACTUALIZAR ---

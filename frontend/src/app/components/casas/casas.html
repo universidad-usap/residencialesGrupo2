@@ -22,7 +22,10 @@
       </div>
       <div class="col-12 col-md-3">
         <label class="form-label">Propietario</label>
-        <input type="text" [(ngModel)]="nuevaCasa.propietario" class="form-control" placeholder="Nombre completo">
+        <select [(ngModel)]="nuevaCasa.propietario" (ngModelChange)="onResidenteSeleccionado($event)" class="form-select">
+          <option value="" disabled selected>Seleccionar...</option>
+          <option *ngFor="let r of residentes" [value]="r.nombre + ' ' + r.apellido">{{ r.nombre }} {{ r.apellido }}</option>
+        </select>
       </div>
       <div class="col-12 col-md-3">
         <label class="form-label">Teléfono Contacto</label>
