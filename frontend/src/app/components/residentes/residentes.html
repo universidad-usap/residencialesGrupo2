@@ -1,5 +1,4 @@
 <div class="page-container">
-  
   <!-- Form Section -->
   <div class="form-section" [class.editing]="editando">
     <div class="form-section-title">
@@ -11,28 +10,55 @@
     <div class="row g-3">
       <div class="col-6 col-md-3">
         <label class="form-label">Nombre</label>
-        <input type="text" [(ngModel)]="nuevoResidente.nombre" class="form-control" placeholder="Nombre">
+        <input
+          type="text"
+          [(ngModel)]="nuevoResidente.nombre"
+          class="form-control"
+          placeholder="Nombre"
+        />
       </div>
       <div class="col-6 col-md-3">
         <label class="form-label">Apellido</label>
-        <input type="text" [(ngModel)]="nuevoResidente.apellido" class="form-control" placeholder="Apellido">
+        <input
+          type="text"
+          [(ngModel)]="nuevoResidente.apellido"
+          class="form-control"
+          placeholder="Apellido"
+        />
       </div>
       <div class="col-6 col-md-2">
         <label class="form-label">Teléfono</label>
-        <input type="text" [(ngModel)]="nuevoResidente.telefono" class="form-control" placeholder="0000-0000">
+        <input
+          type="text"
+          [(ngModel)]="nuevoResidente.telefono"
+          class="form-control"
+          placeholder="0000-0000"
+        />
       </div>
       <div class="col-12 col-md-3">
         <label class="form-label">Email</label>
-        <input type="email" [(ngModel)]="nuevoResidente.email" class="form-control" placeholder="correo@ejemplo.com">
+        <input
+          type="email"
+          [(ngModel)]="nuevoResidente.email"
+          class="form-control"
+          placeholder="correo@ejemplo.com"
+        />
       </div>
       <div class="col-12 col-md-2 d-flex align-items-end gap-2">
-        <button class="btn w-100"
-                [ngClass]="editando ? 'btn-warning' : 'btn-primary'" 
-                (click)="guardarResidente()">
+        <button
+          class="btn w-100"
+          [ngClass]="editando ? 'btn-warning' : 'btn-primary'"
+          (click)="guardarResidente()"
+        >
           <i class="fas" [ngClass]="editando ? 'fa-sync' : 'fa-save'"></i>
           {{ editando ? 'Actualizar' : 'Guardar' }}
         </button>
-        <button *ngIf="editando" class="btn btn-secondary" (click)="cancelarEdicion()" title="Cancelar edición">
+        <button
+          *ngIf="editando"
+          class="btn btn-secondary"
+          (click)="cancelarEdicion()"
+          title="Cancelar edición"
+        >
           <i class="fas fa-times"></i>
         </button>
       </div>
@@ -42,18 +68,29 @@
   <!-- Data Table -->
   <div class="data-table-card">
     <div class="data-table-header">
-      <div class="data-table-title">
-        <i class="fas fa-users"></i> Gestión de Residentes
-      </div>
+      <div class="data-table-title"><i class="fas fa-users"></i> Gestión de Residentes</div>
       <div class="d-flex align-items-center gap-2 flex-wrap">
         <div class="search-bar">
           <i class="fas fa-search search-icon"></i>
-          <input type="text" [(ngModel)]="searchText" class="form-control" placeholder="Buscar residente...">
+          <input
+            type="text"
+            [(ngModel)]="searchText"
+            class="form-control"
+            placeholder="Buscar residente..."
+          />
         </div>
-        <button class="btn btn-outline-success btn-sm" (click)="exportarResidentesExcel()" title="Exportar a Excel">
+        <button
+          class="btn btn-outline-success btn-sm"
+          (click)="exportarResidentesExcel()"
+          title="Exportar a Excel"
+        >
           <i class="fas fa-file-excel"></i>
         </button>
-        <button class="btn btn-outline-danger btn-sm" (click)="exportarResidentesPdf()" title="Exportar a PDF">
+        <button
+          class="btn btn-outline-danger btn-sm"
+          (click)="exportarResidentesPdf()"
+          title="Exportar a PDF"
+        >
           <i class="fas fa-file-pdf"></i>
         </button>
         <span class="record-count">{{ residentesFiltrados.length }} Registros</span>
@@ -65,61 +102,78 @@
           <tr>
             <th>Nombre Completo</th>
             <th>Teléfono</th>
-            <th>Email</th>
-            <th>Casa #</th>
             <th>Tipo</th>
             <th class="text-center">Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let residente of residentesFiltrados" class="animate-fade-in">
-            <td class="fw-bold" style="color: var(--color-primary);">{{ residente.nombre }} {{ residente.apellido }}</td>
+            <td class="fw-bold" style="color: var(--color-primary)">
+              {{ residente.nombre }} {{ residente.apellido }}
+            </td>
             <td>
               <ng-container *ngIf="residente.telefono; else noTel">
-                <a [href]="'tel:' + residente.telefono" class="text-decoration-none" style="color: var(--color-text);">
-                  <i class="fas fa-phone-alt me-1" style="color: var(--color-success); font-size: 0.75rem;"></i>{{ residente.telefono }}
+                <a
+                  [href]="'tel:' + residente.telefono"
+                  class="text-decoration-none"
+                  style="color: var(--color-text)"
+                >
+                  <i
+                    class="fas fa-phone-alt me-1"
+                    style="color: var(--color-success); font-size: 0.75rem"
+                  ></i
+                  >{{ residente.telefono }}
                 </a>
               </ng-container>
               <ng-template #noTel><span class="text-muted small">Sin teléfono</span></ng-template>
             </td>
             <td>
               <ng-container *ngIf="residente.email; else noEmail">
-                <a [href]="'mailto:' + residente.email" class="text-decoration-none" style="color: var(--color-text);">
-                  <i class="fas fa-envelope me-1" style="color: var(--color-info); font-size: 0.75rem;"></i>{{ residente.email }}
+                <a
+                  [href]="'mailto:' + residente.email"
+                  class="text-decoration-none"
+                  style="color: var(--color-text)"
+                >
+                  <i
+                    class="fas fa-envelope me-1"
+                    style="color: var(--color-info); font-size: 0.75rem"
+                  ></i
+                  >{{ residente.email }}
                 </a>
               </ng-container>
               <ng-template #noEmail><span class="text-muted small">Sin email</span></ng-template>
             </td>
-            <td>
-              <span class="badge badge-soft-info">{{ residente.numero_casa || 'Sin Casa' }}</span>
-            </td>
-            <td>
-              <span class="badge" [ngClass]="getTipoBadgeClass(residente.tipo)">
-                {{ residente.tipo | uppercase }}
-              </span>
-            </td>
             <td class="text-center">
               <div class="btn-group">
-                <button class="btn btn-outline-info btn-sm" (click)="prepararEditar(residente)" title="Editar">
+                <button
+                  class="btn btn-outline-info btn-sm"
+                  (click)="prepararEditar(residente)"
+                  title="Editar"
+                >
                   <i class="fas fa-edit"></i>
                 </button>
-                <button class="btn btn-outline-danger btn-sm" (click)="eliminarResidente(residente)" title="Eliminar">
+                <button
+                  class="btn btn-outline-danger btn-sm"
+                  (click)="eliminarResidente(residente)"
+                  title="Eliminar"
+                >
                   <i class="fas fa-trash-alt"></i>
                 </button>
               </div>
             </td>
           </tr>
-          
+
           <tr *ngIf="residentesFiltrados.length === 0">
             <td colspan="6" class="empty-state">
               <i class="fas fa-search-minus"></i>
-              <p>No se encontraron residentes que coincidan con "{{searchText}}"</p>
-              <button class="btn btn-sm btn-outline-primary" (click)="searchText = ''">Limpiar búsqueda</button>
+              <p>No se encontraron residentes que coincidan con "{{ searchText }}"</p>
+              <button class="btn btn-sm btn-outline-primary" (click)="searchText = ''">
+                Limpiar búsqueda
+              </button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
-
 </div>
