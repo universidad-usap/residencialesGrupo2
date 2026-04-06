@@ -20,11 +20,11 @@ app.use(express.json()); // CRÍTICO: Para que el backend entienda los datos que
 
 // 3. Conexión a la Nueva Base de Datos
 app.use(myConnection(mysql, {
-    host: 'localhost' || "127.0.0.1",
-    user: 'root',
-    password: 'admin123' , // Pon tu contraseña de MySQL
-    port: 3306,
-    database: 'residencial_qr'    // Tu nueva base de datos
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD, // Pon tu contraseña de MySQL
+    port: Number(process.env.DB_PORT) || 3306,
+    database: process.env.DB_NAME || 'residencial_qr'    // Tu nueva base de datos
 }, 'single'));
 
 // 4. Importar las nuevas Rutas
