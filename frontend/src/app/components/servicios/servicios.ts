@@ -71,10 +71,8 @@ export class ServiciosComponent implements OnInit {
       (res: any) => {
         Swal.fire('Éxito', 'Servicio agregado al catálogo', 'success');
         this.nuevoServicio = { nombre: '', descripcion: '', costo: 0 };
-        this.servicios = [...this.servicios, res];
-
-      this.cd.detectChanges();
-    },
+        this.cargarServicios();
+      },
       (err: any) => Swal.fire('Error', 'No se pudo guardar el servicio', 'error')
     );
   }
@@ -104,6 +102,7 @@ export class ServiciosComponent implements OnInit {
         
         if (!nombre || !costo) {
           Swal.showValidationMessage('Nombre y costo son obligatorios');
+          return false;
         }
         return { nombre, descripcion, costo };
       }
