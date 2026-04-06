@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
@@ -13,7 +14,7 @@ app.set('port', process.env.PORT || 3000);
 // 2. Middlewares
 app.use(morgan('dev'));
 app.use(cors({
-    origin: "http://localhost:4200", // Permite que Angular se conecte
+    origin: process.env.CORS_ORIGIN || "http://localhost:4200",
     credentials: true
 }));
 app.use(express.json()); // CRÍTICO: Para que el backend entienda los datos que envía Angular
