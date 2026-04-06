@@ -75,6 +75,8 @@ body.dark-mode {
   --bs-body-color: #F1F5F9;
   --bs-body-bg: #0F172A;
   --bs-border-color: #334155;
+  --bs-secondary-color: rgba(148, 163, 184, 0.75);
+  --bs-table-color: #F1F5F9;
 
   --color-background: #0F172A;
   --color-surface: #1E293B;
