@@ -31,13 +31,9 @@ controller.save = (req, res) => {
         return res.status(400).json({ error: 'El nombre y apellido son obligatorios' });
     }
 
-    if (!data.id_casa) {
-        return res.status(400).json({ error: 'Debe seleccionar una casa' });
-    }
-
-    const idCasa = parseInt(data.id_casa);
-    if (isNaN(idCasa)) {
-        return res.status(400).json({ error: 'El ID de la casa debe ser un número válido' });
+    // Normalizar id_casa vacío a null
+    if (data.id_casa === '' || data.id_casa === undefined) {
+        data.id_casa = null;
     }
 
     console.log('Guardando residente:', data);
@@ -48,16 +44,31 @@ controller.save = (req, res) => {
             return res.status(500).json({ error: 'Error de conexión a la base de datos' });
         }
 
-        conn.query('SELECT id_casa FROM casas WHERE id_casa = ?', [idCasa], (err, rows) => {
-            if (err) {
-                console.error('Error al verificar casa:', err);
-                return res.status(500).json({ error: 'Error al verificar la casa' });
+        // Solo validar la casa si se proporcionó un id_casa
+        if (data.id_casa !== null) {
+            const idCasa = parseInt(data.id_casa);
+            if (isNaN(idCasa)) {
+                return res.status(400).json({ error: 'El ID de la casa debe ser un número válido' });
             }
+            data.id_casa = idCasa;
 
-            if (rows.length === 0) {
-                return res.status(400).json({ error: 'La casa seleccionada no existe' });
-            }
+            conn.query('SELECT id_casa FROM casas WHERE id_casa = ?', [idCasa], (err, rows) => {
+                if (err) {
+                    console.error('Error al verificar casa:', err);
+                    return res.status(500).json({ error: 'Error al verificar la casa' });
+                }
 
+                if (rows.length === 0) {
+                    return res.status(400).json({ error: 'La casa seleccionada no existe' });
+                }
+
+                insertarResidente();
+            });
+        } else {
+            insertarResidente();
+        }
+
+        function insertarResidente() {
             conn.query('INSERT INTO residentes SET ?', [data], (err, result) => {
                 if (err) {
                     console.error('Error al insertar residente:', err);
@@ -78,7 +89,7 @@ controller.save = (req, res) => {
                 console.log('Residente guardado con ID:', result.insertId);
                 res.json({ message: 'Residente guardado correctamente', id: result.insertId });
             });
-        });
+        }
     });
 };
 
@@ -90,8 +101,9 @@ controller.update = (req, res) => {
         return res.status(400).json({ error: 'El nombre y apellido son obligatorios' });
     }
 
-    if (!data.id_casa) {
-        return res.status(400).json({ error: 'Debe seleccionar una casa' });
+    // Normalizar id_casa vacío a null
+    if (data.id_casa === '' || data.id_casa === undefined) {
+        data.id_casa = null;
     }
 
     console.log('Actualizando residente:', id_residente, data);
@@ -102,16 +114,31 @@ controller.update = (req, res) => {
             return res.status(500).json({ error: 'Error de conexión a la base de datos' });
         }
 
-        conn.query('SELECT id_casa FROM casas WHERE id_casa = ?', [data.id_casa], (err, rows) => {
-            if (err) {
-                console.error('Error al verificar casa:', err);
-                return res.status(500).json({ error: 'Error al verificar la casa' });
+        // Solo validar la casa si se proporcionó un id_casa
+        if (data.id_casa !== null) {
+            const idCasa = parseInt(data.id_casa);
+            if (isNaN(idCasa)) {
+                return res.status(400).json({ error: 'El ID de la casa debe ser un número válido' });
             }
+            data.id_casa = idCasa;
 
-            if (rows.length === 0) {
-                return res.status(400).json({ error: 'La casa seleccionada no existe' });
-            }
+            conn.query('SELECT id_casa FROM casas WHERE id_casa = ?', [idCasa], (err, rows) => {
+                if (err) {
+                    console.error('Error al verificar casa:', err);
+                    return res.status(500).json({ error: 'Error al verificar la casa' });
+                }
 
+                if (rows.length === 0) {
+                    return res.status(400).json({ error: 'La casa seleccionada no existe' });
+                }
+
+                actualizarResidente();
+            });
+        } else {
+            actualizarResidente();
+        }
+
+        function actualizarResidente() {
             conn.query('UPDATE residentes SET ? WHERE id_residente = ?', [data, id_residente], (err, result) => {
                 if (err) {
                     console.error('Error al actualizar residente:', err);
@@ -128,7 +155,7 @@ controller.update = (req, res) => {
                 console.log('Residente actualizado:', id_residente);
                 res.json({ message: 'Residente actualizado correctamente' });
             });
-        });
+        }
     });
 };
 

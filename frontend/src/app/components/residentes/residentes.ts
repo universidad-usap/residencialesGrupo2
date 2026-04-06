@@ -84,19 +84,9 @@ export class Residentes implements OnInit {
       return;
     }
 
-    if (!this.nuevoResidente.id_casa) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Campos obligatorios',
-        text: 'Debe seleccionar una casa.',
-        confirmButtonColor: '#c5a059',
-      });
-      return;
-    }
-
     const datosResidente = {
       ...this.nuevoResidente,
-      id_casa: Number(this.nuevoResidente.id_casa),
+      id_casa: this.nuevoResidente.id_casa ? Number(this.nuevoResidente.id_casa) : '',
     };
 
     if (this.editando) {
