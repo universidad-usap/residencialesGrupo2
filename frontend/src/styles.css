@@ -69,6 +69,13 @@
 
 /* --- DARK MODE TOKENS --- */
 body.dark-mode {
+  color-scheme: dark;
+
+  /* Bootstrap 5 variable overrides */
+  --bs-body-color: #F1F5F9;
+  --bs-body-bg: #0F172A;
+  --bs-border-color: #334155;
+
   --color-background: #0F172A;
   --color-surface: #1E293B;
   --color-surface-elevated: #334155;
@@ -243,6 +250,25 @@ a:hover { color: var(--color-primary-dark); }
 }
 
 .form-control::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+/* Dark mode — explicit input overrides (fixes browser color-scheme coercion) */
+body.dark-mode .form-control,
+body.dark-mode .form-select,
+body.dark-mode .input-group-text {
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+body.dark-mode .form-control:focus,
+body.dark-mode .form-select:focus {
+  color: var(--color-text);
+  background-color: var(--color-surface);
+}
+
+body.dark-mode .form-control::placeholder {
   color: var(--color-text-tertiary);
 }
 
