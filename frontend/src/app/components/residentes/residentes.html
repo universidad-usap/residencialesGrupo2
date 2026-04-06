@@ -25,13 +25,6 @@
         <label class="form-label">Email</label>
         <input type="email" [(ngModel)]="nuevoResidente.email" class="form-control" placeholder="correo@ejemplo.com">
       </div>
-      <div class="col-6 col-md-2">
-        <label class="form-label">Casa #</label>
-        <select [(ngModel)]="nuevoResidente.id_casa" class="form-select">
-          <option value="" disabled selected>Seleccionar...</option>
-          <option *ngFor="let casa of casas" [value]="casa.id_casa">{{ casa.numero_casa }}</option>
-        </select>
-      </div>
       <div class="col-12 col-md-2 d-flex align-items-end gap-2">
         <button class="btn w-100"
                 [ngClass]="editando ? 'btn-warning' : 'btn-primary'" 
