@@ -29,7 +29,7 @@ Requisitos previos
   - Node.js instalado.
   - Servidor MySQL activo.
 Instalación
-  1. Clona el repositorio: git clone https://github.com/tu-usuario/residencialesGrupo2.git
+  1. Clona el repositorio: git clone https://github.com/universidad-usap/residencialesGrupo2.git
   2. Configura el backend:
      cd backend
      npm install
