@@ -33,7 +33,7 @@ Instalación
   2. Configura el backend:
      cd backend
      npm install
-     # Crea tu archivo .env con las credenciales de tu DB
+     * Crea tu archivo .env con las credenciales de tu DB
      npm run dev
   3. Configura el frontend:
      cd ../frontend
