@@ -17,12 +17,12 @@ El ecosistema de la aplicación fue desarrollado utilizando las siguientes tecno
 
 👥 Equipo de Desarrollo
 El éxito de este proyecto fue posible gracias a la colaboración estratégica de:
-Nombre              Numero de cuenta
-Angie Cruz          1201056
-Abisaid Ayala       1210795
-Luis Torres         1210807
-Jose Sevilla        1200700
-Jesús Reyes         1230735
+- Nombre              Numero de cuenta
+- Angie Cruz          1201056
+- Abisaid Ayala       1210795
+- Luis Torres         1210807
+- Jose Sevilla        1200700
+- Jesús Reyes         1230735
 
 🔧 Configuración del Proyecto
 Requisitos previos
